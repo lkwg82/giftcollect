@@ -1,8 +1,9 @@
 <!DOCTYPE html>
 <html>
 <head>
-    <title>gitcollect</title>
+    <title>giftcollect</title>
     <script src="https://www.gstatic.com/firebasejs/4.1.3/firebase.js"></script>
+    <script src="https://code.jquery.com/jquery-3.2.1.min.js"></script>
     <!--<script src="https://www.gstatic.com/firebasejs/4.1.3/firebase-app.js"></script>-->
     <!--<script src="https://www.gstatic.com/firebasejs/4.1.3/firebase-auth.js"></script>-->
     <!--<script src="https://www.gstatic.com/firebasejs/4.1.3/firebase-database.js"></script>-->
@@ -30,7 +31,7 @@
     <script type="text/javascript">
         // FirebaseUI config.
         var uiConfig = {
-            signInSuccessUrl: '<url-to-redirect-to-on-success>',
+            signInSuccessUrl: '#loggedIn',
             signInOptions: [
                 // Leave the lines as is for the providers you want to offer your users.
                 firebase.auth.GoogleAuthProvider.PROVIDER_ID
@@ -39,16 +40,65 @@
             tosUrl: '<your-tos-url>'
         };
 
-        // Initialize the FirebaseUI Widget using Firebase.
-        var ui = new firebaseui.auth.AuthUI(firebase.auth());
-        // The start method will wait until the DOM is loaded.
-        ui.start('#firebaseui-auth-container', uiConfig);
+
+        initApp = function () {
+            firebase.auth().onAuthStateChanged(function (user) {
+                if (user) {
+                    // User is signed in.
+                    var displayName = user.displayName;
+                    var email = user.email;
+                    var emailVerified = user.emailVerified;
+                    var photoURL = user.photoURL;
+                    var uid = user.uid;
+                    var phoneNumber = user.phoneNumber;
+                    var providerData = user.providerData;
+                    user.getIdToken().then(function (accessToken) {
+                        document.getElementById('sign-in-status').textContent = 'Signed in';
+                        document.getElementById('sign-in').innerHTML = '<a href="#" >sign out</a>';
+                        document.getElementById('account-details').textContent = JSON.stringify({
+                            displayName: displayName,
+                            email: email,
+                            emailVerified: emailVerified,
+                            phoneNumber: phoneNumber,
+                            photoURL: photoURL,
+                            uid: uid,
+                            accessToken: accessToken,
+                            providerData: providerData
+                        }, null, '  ');
+
+                        document.getElementById('sign-in').onclick = function () {
+                            firebase.auth().signOut();
+                            window.location.reload();
+                        };
+                        document.getElementById('firebaseui-auth-container').style['display'] = 'none';
+                    });
+                } else {
+                    // Initialize the FirebaseUI Widget using Firebase.
+                    var ui = new firebaseui.auth.AuthUI(firebase.auth());
+                    // The start method will wait until the DOM is loaded.
+                    ui.start('#firebaseui-auth-container', uiConfig);
+                    // User is signed out.
+                    document.getElementById('sign-in-status').textContent = '';
+                    document.getElementById('sign-in').textContent = '';
+                    document.getElementById('account-details').textContent = '';
+                }
+            }, function (error) {
+                console.log(error);
+            });
+        };
+
+        window.addEventListener('load', function () {
+            initApp()
+        });
     </script>
 </head>
 <body>
 <!-- The surrounding HTML is left untouched by FirebaseUI.
      Your app may use that space for branding, controls and other customizations.-->
-<h1>Welcome to My Awesome App</h1>
 <div id="firebaseui-auth-container"></div>
+
+<div id="sign-in-status"></div>
+<div id="sign-in"></div>
+<div id="account-details"></div>
 </body>
 </html>
