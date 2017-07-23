@@ -24,7 +24,15 @@ export class AuthServiceProvider {
   }
 
   signInWithGoogle(): firebase.Promise<any> {
-    return this.afAuth.auth.signInWithRedirect(new firebase.auth.GoogleAuthProvider());
+    let authProvider = new firebase.auth.GoogleAuthProvider();
+    // https://developers.google.com/identity/protocols/OpenIDConnect#authenticationuriparameters
+    authProvider.setCustomParameters({
+      'prompt': 'select_account',
+    });
+    let auth = this.afAuth.auth;
+    return auth.signInWithRedirect(authProvider).catch(function (error) {
+      console.error(error);
+    });
   }
 
   signOut(): void {
