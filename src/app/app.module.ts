@@ -4,11 +4,15 @@ import {IonicApp, IonicErrorHandler, IonicModule} from 'ionic-angular';
 import {SplashScreen} from '@ionic-native/splash-screen';
 import {StatusBar} from '@ionic-native/status-bar';
 
-import {MyApp} from './app.component';
-import {HomePage} from '../pages/home/home';
 import {AngularFireModule} from "angularfire2";
 import {AuthServiceProvider} from '../providers/auth-service/auth-service';
 import {AngularFireAuth} from 'angularfire2/auth';
+
+import {MyApp} from './app.component';
+
+import {AboutPage} from "../pages/about/about";
+import {HomePage} from '../pages/home/home';
+import {LoginPage} from "../pages/login/login";
 
 export const firebaseConfig = {
   apiKey: "AIzaSyAxO7i-Ekduq6VbeLkouU6pFnOiD28xCLg",
@@ -22,7 +26,9 @@ export const firebaseConfig = {
 @NgModule({
   declarations: [
     MyApp,
-    HomePage
+    AboutPage,
+    HomePage,
+    LoginPage,
   ],
   imports: [
     BrowserModule,
@@ -32,7 +38,9 @@ export const firebaseConfig = {
   bootstrap: [IonicApp],
   entryComponents: [
     MyApp,
-    HomePage
+    AboutPage,
+    LoginPage,
+    HomePage,
   ],
   providers: [
     AngularFireAuth,

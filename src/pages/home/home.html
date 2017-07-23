@@ -1,5 +1,8 @@
 <ion-header>
   <ion-navbar>
+    <button ion-button menuToggle>
+      <ion-icon name="menu"></ion-icon>
+    </button>
     <ion-title>
       Gift Collect ({{username}})
     </ion-title>
@@ -8,7 +11,10 @@
 
 <ion-content padding>
   <button ion-button (click)="presentAlert()">alert</button>
+  <button ion-button full (click)="signOut()">
+    <ion-icon name="log-out"></ion-icon>
+    logout
+  </button>
+  <button [navPush]="aboutPage">Go To About</button>
 
-  <button ion-button outline full *ngIf="!isLoggedIn()" (click)="signInWithGoogle()">sign in</button>
-  <button ion-button outline full *ngIf="isLoggedIn()" (click)="signOut()">sign out</button>
 </ion-content>

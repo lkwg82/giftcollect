@@ -1,42 +1,34 @@
 import {Component} from '@angular/core';
 import {AuthServiceProvider} from "../../providers/auth-service/auth-service";
-import {AlertController} from "ionic-angular";
+import {AlertController, NavController} from "ionic-angular";
 import * as firebase from 'firebase/app';
+
+import {AboutPage} from "../about/about";
+import {LoginPage} from "../login/login";
 
 @Component({
   selector: 'page-home',
   templateUrl: 'home.html'
 })
 export class HomePage {
+  aboutPage = AboutPage;
   username;
 
   constructor(private _auth: AuthServiceProvider,
-              private alertCtrl: AlertController) {
+              private alertCtrl: AlertController,
+              public navCtrl: NavController) {
     let authState = this._auth.afAuth.authState;
     authState.subscribe((user: firebase.User) => {
-      if (!user) {
-        this.username = 'anon';
+      if (user) {
+        this.username = user.displayName;
         return;
       }
-      this.username = user.displayName;
+      navCtrl.setRoot(LoginPage);
     });
-  }
-
-  signInWithGoogle(): void {
-    this._auth.signInWithGoogle()
-      .then(() => this.onSignInSuccess());
   }
 
   signOut(): void {
     this._auth.signOut();
-  }
-
-  isLoggedIn(): boolean {
-    return this._auth.authenticated;
-  }
-
-  private onSignInSuccess(): void {
-    console.log("Google display name ", this._auth);
   }
 
   presentAlert() {
