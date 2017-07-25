@@ -1,10 +1,9 @@
 import {Component} from '@angular/core';
 import {AuthServiceProvider} from "../../providers/auth-service/auth-service";
-import {AlertController, NavController} from "ionic-angular";
+import {AlertController} from "ionic-angular";
 import * as firebase from 'firebase/app';
 
 import {AboutPage} from "../about/about";
-import {LoginPage} from "../login/login";
 
 @Component({
   selector: 'page-home',
@@ -15,20 +14,13 @@ export class HomePage {
   username;
 
   constructor(private _auth: AuthServiceProvider,
-              private alertCtrl: AlertController,
-              public navCtrl: NavController) {
+              private alertCtrl: AlertController) {
     let authState = this._auth.afAuth.authState;
     authState.subscribe((user: firebase.User) => {
       if (user) {
         this.username = user.displayName;
-        return;
       }
-      navCtrl.setRoot(LoginPage);
     });
-  }
-
-  signOut(): void {
-    this._auth.signOut();
   }
 
   presentAlert() {

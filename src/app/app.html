@@ -1,7 +1,10 @@
-<ion-menu [content]="mycontent" type="overlay">
+<ion-menu [content]="mycontent">
   <ion-content>
     <ion-list>
-      sss
+      <button ion-button full menuClose (click)="signOut()">
+        <ion-icon name="log-out"></ion-icon>
+        logout
+      </button>
     </ion-list>
   </ion-content>
 </ion-menu>
