@@ -1,5 +1,4 @@
 import {Component} from '@angular/core';
-
 import {AuthServiceProvider} from "../../providers/auth-service/auth-service";
 
 @Component({

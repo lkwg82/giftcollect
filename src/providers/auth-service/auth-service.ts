@@ -14,6 +14,7 @@ import * as firebase from 'firebase/app';
 @Injectable()
 export class AuthServiceProvider {
   private currentUser: firebase.User;
+  private additionalUserInfo: firebase.auth.AdditionalUserInfo;
 
   constructor(public afAuth: AngularFireAuth) {
     afAuth.authState.subscribe((user: firebase.User) => this.currentUser = user);
@@ -29,8 +30,13 @@ export class AuthServiceProvider {
     authProvider.setCustomParameters({
       'prompt': 'select_account',
     });
+
+    let authServiceProvider = this;
     let auth = this.afAuth.auth;
-    return auth.signInWithRedirect(authProvider).catch(function (error) {
+
+    return auth.signInWithPopup(authProvider).then(function (result) {
+      authServiceProvider.additionalUserInfo = result.additionalUserInfo
+    }).catch(function (error) {
       console.error(error);
     });
   }
