@@ -13,6 +13,7 @@ import {MyApp} from './app.component';
 import {AboutPage} from "../pages/about/about";
 import {HomePage} from '../pages/home/home';
 import {LoginPage} from "../pages/login/login";
+import {NewGiftPage} from "../pages/new-gift/new-gift";
 
 export const firebaseConfig = {
   apiKey: "AIzaSyAxO7i-Ekduq6VbeLkouU6pFnOiD28xCLg",
@@ -29,6 +30,7 @@ export const firebaseConfig = {
     AboutPage,
     HomePage,
     LoginPage,
+    NewGiftPage,
   ],
   imports: [
     BrowserModule,
@@ -41,6 +43,7 @@ export const firebaseConfig = {
     AboutPage,
     LoginPage,
     HomePage,
+    NewGiftPage,
   ],
   providers: [
     AngularFireAuth,

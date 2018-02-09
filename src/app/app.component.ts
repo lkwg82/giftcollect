@@ -6,14 +6,14 @@ import * as firebase from 'firebase/app';
 
 import {LoginPage} from "../pages/login/login";
 import {AuthServiceProvider} from "../providers/auth-service/auth-service";
-import {HomePage} from "../pages/home/home";
+import {NewGiftPage} from "../pages/new-gift/new-gift";
 
 @Component({
   templateUrl: 'app.html'
 })
 export class MyApp {
   @ViewChild('mycontent') nav: NavController;
-  rootPage: any = LoginPage;
+  rootPage: any = NewGiftPage;
 
   constructor(platform: Platform,
               statusBar: StatusBar,
@@ -35,8 +35,7 @@ export class MyApp {
     let authState = this._auth.afAuth.authState;
     authState.subscribe((user: firebase.User) => {
       if (user) {
-        // this.nav.push(Page1);
-        this.nav.setRoot(HomePage);
+        this.nav.setRoot(NewGiftPage);
       } else {
         this.nav.setRoot(LoginPage);
       }
