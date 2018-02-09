@@ -3,8 +3,6 @@ import {NavController, Platform} from 'ionic-angular';
 import {StatusBar} from '@ionic-native/status-bar';
 import {SplashScreen} from '@ionic-native/splash-screen';
 import * as firebase from 'firebase/app';
-
-import {LoginPage} from "../pages/login/login";
 import {AuthServiceProvider} from "../providers/auth-service/auth-service";
 import {NewGiftPage} from "../pages/new-gift/new-gift";
 
@@ -37,7 +35,7 @@ export class MyApp {
       if (user) {
         this.nav.setRoot(NewGiftPage);
       } else {
-        this.nav.setRoot(LoginPage);
+        this.nav.setRoot(NewGiftPage);
       }
     });
   }

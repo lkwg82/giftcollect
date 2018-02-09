@@ -17,7 +17,7 @@
   <ion-grid>
     <ion-row>
       <ion-col>
-        <button ion-button round outline>
+        <button ion-button round outline (click)="takePicture()">
           <ion-icon name="camera"></ion-icon>
         </button>
       </ion-col>
@@ -28,6 +28,8 @@
       </ion-col>
     </ion-row>
   </ion-grid>
+  Latest Picture:
+  <img [src]="base64Image" *ngIf="base64Image"/>
   <ion-item>
     <ion-textarea placeholder="Beschreibung"></ion-textarea>
   </ion-item>
