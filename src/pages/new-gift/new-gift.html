@@ -30,12 +30,13 @@
   </ion-grid>
   Latest Picture:
   <img [src]="base64Image" *ngIf="base64Image"/>
+  <ion-input type="text" [value]="size"></ion-input>
   <ion-item>
     <ion-textarea placeholder="Beschreibung"></ion-textarea>
   </ion-item>
   <ion-item>
     <ion-label>geschätzter Preis (€)</ion-label>
-    <ion-input class="input-symbol-euro" type="number" [(ngModel)]="maxPrice"></ion-input>
+    <ion-input type="number" [(ngModel)]="maxPrice"></ion-input>
   </ion-item>
   <ion-item>
     <ion-label>nicht teurer</ion-label>
