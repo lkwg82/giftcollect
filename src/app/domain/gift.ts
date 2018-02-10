@@ -1,11 +1,12 @@
 export class Gift {
-  public title: String = "";
-  public description: String = "";
+  public id: string;
+  public title: string = "";
+  public description: string = "";
   public estimatedPrice: number = 0;
   public doNotExceedPrice: boolean = false;
   public doAskBeforeBuy: boolean = false;
 
-  constructor() {
+  constructor(title?: string) {
+    this.title = title;
   }
-
 }

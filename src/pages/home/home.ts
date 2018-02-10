@@ -4,6 +4,7 @@ import * as firebase from 'firebase/app';
 import {GiftStore} from "../../providers/giftstore";
 import {NavController} from "ionic-angular";
 import {NewGiftPage} from "../new-gift/new-gift";
+import {Gift} from "../../app/domain/gift";
 
 @Component({
   selector: 'page-home',
@@ -25,5 +26,9 @@ export class HomePage {
 
   addGift() {
     this._navCtr.push(NewGiftPage);
+  }
+
+  itemSelected(gift: Gift) {
+    this._navCtr.push(NewGiftPage, {"gift": gift})
   }
 }

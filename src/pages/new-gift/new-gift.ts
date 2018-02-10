@@ -1,6 +1,6 @@
 import {Component} from '@angular/core';
 import {Camera} from '@ionic-native/camera';
-import {NavController} from "ionic-angular";
+import {NavController, NavParams} from "ionic-angular";
 import {Gift} from "../../app/domain/gift";
 import {GiftStore} from "../../providers/giftstore";
 
@@ -13,15 +13,17 @@ export class NewGiftPage {
   public base64Image: string;
 
   gift: Gift = new Gift();
+  changing: boolean = false;
 
   constructor(private camera: Camera,
               private _nav: NavController,
+              private _navParams: NavParams,
               private giftStore: GiftStore) {
     this.base64Image = "";
-  }
-
-  ionViewDidLoad() {
-    console.log('ionViewDidLoad NewGiftPage');
+    if (_navParams.data.hasOwnProperty("gift")) {
+      this.gift = _navParams.get("gift") as Gift;
+      this.changing = true;
+    }
   }
 
   takePicture() {
@@ -38,7 +40,11 @@ export class NewGiftPage {
   }
 
   addGift() {
-    this.giftStore.add(this.gift);
+    if (this.changing) {
+      this.giftStore.update(this.gift);
+    } else {
+      this.giftStore.add(this.gift);
+    }
     this._nav.pop();
   }
 }
