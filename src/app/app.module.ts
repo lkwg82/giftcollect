@@ -15,6 +15,7 @@ import {HomePage} from '../pages/home/home';
 import {LoginPage} from "../pages/login/login";
 import {NewGiftPage} from "../pages/new-gift/new-gift";
 import {Camera} from "@ionic-native/camera";
+import {GiftStore} from "../providers/giftstore";
 
 export const firebaseConfig = {
   apiKey: "AIzaSyAxO7i-Ekduq6VbeLkouU6pFnOiD28xCLg",
@@ -50,6 +51,7 @@ export const firebaseConfig = {
     AngularFireAuth,
     AuthServiceProvider,
     Camera,
+    GiftStore,
     SplashScreen,
     StatusBar,
     {provide: ErrorHandler, useClass: IonicErrorHandler}

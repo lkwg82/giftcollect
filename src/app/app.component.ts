@@ -4,14 +4,14 @@ import {StatusBar} from '@ionic-native/status-bar';
 import {SplashScreen} from '@ionic-native/splash-screen';
 import * as firebase from 'firebase/app';
 import {AuthServiceProvider} from "../providers/auth-service/auth-service";
-import {NewGiftPage} from "../pages/new-gift/new-gift";
+import {HomePage} from "../pages/home/home";
 
 @Component({
   templateUrl: 'app.html'
 })
 export class MyApp {
   @ViewChild('mycontent') nav: NavController;
-  rootPage: any = NewGiftPage;
+  rootPage: any = HomePage;
 
   constructor(platform: Platform,
               statusBar: StatusBar,
@@ -32,11 +32,11 @@ export class MyApp {
   ngOnInit() {
     let authState = this._auth.afAuth.authState;
     authState.subscribe((user: firebase.User) => {
-      if (user) {
-        this.nav.setRoot(NewGiftPage);
-      } else {
-        this.nav.setRoot(NewGiftPage);
-      }
+      // if (user) {
+      //   this.nav.setRoot(HomePage);
+      // } else {
+      //   this.nav.setRoot(LoginPage);
+      // }
     });
   }
 

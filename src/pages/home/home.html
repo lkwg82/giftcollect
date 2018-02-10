@@ -10,5 +10,14 @@
 </ion-header>
 
 <ion-content padding>
-
+  <ion-fab right bottom>
+    <button ion-fab color="green" (click)="addGift()">
+      <ion-icon name="add"></ion-icon>
+    </button>
+  </ion-fab>
+  <ion-list>
+    <button ion-item *ngFor="let gift of giftStore.gifts">
+      {{ gift.title }}
+    </button>
+  </ion-list>
 </ion-content>

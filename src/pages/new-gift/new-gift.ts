@@ -2,6 +2,7 @@ import {Component} from '@angular/core';
 import {Camera} from '@ionic-native/camera';
 import {NavController} from "ionic-angular";
 import {Gift} from "../../app/domain/gift";
+import {GiftStore} from "../../providers/giftstore";
 
 
 @Component({
@@ -13,7 +14,9 @@ export class NewGiftPage {
 
   gift: Gift = new Gift();
 
-  constructor(private camera: Camera, private _nav: NavController) {
+  constructor(private camera: Camera,
+              private _nav: NavController,
+              private giftStore: GiftStore) {
     this.base64Image = "";
   }
 
@@ -35,8 +38,8 @@ export class NewGiftPage {
   }
 
   addGift() {
-    console.log("name: ", this.gift);
-    // this._nav.setRoot(HomePage);
+    this.giftStore.add(this.gift);
+    this._nav.pop();
   }
 }
 
