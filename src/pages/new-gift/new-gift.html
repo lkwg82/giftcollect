@@ -23,7 +23,7 @@
       </ion-col>
       <ion-col col-auto>
         <ion-item>
-          <ion-input type="text" placeholder="Titel"></ion-input>
+          <ion-input type="text" placeholder="Titel" [(ngModel)]="gift.title"></ion-input>
         </ion-item>
       </ion-col>
     </ion-row>
@@ -32,20 +32,21 @@
   <img [src]="base64Image" *ngIf="base64Image"/>
   <ion-input type="text" [value]="size"></ion-input>
   <ion-item>
-    <ion-textarea placeholder="Beschreibung"></ion-textarea>
+    <ion-textarea placeholder="Beschreibung" [(ngModel)]="gift.description"></ion-textarea>
   </ion-item>
   <ion-item>
     <ion-label>geschätzter Preis (€)</ion-label>
-    <ion-input type="number" [(ngModel)]="maxPrice"></ion-input>
+    <ion-input type="number" [(ngModel)]="gift.estimatedPrice"></ion-input>
   </ion-item>
   <ion-item>
     <ion-label>nicht teurer</ion-label>
-    <ion-checkbox [(ngModel)]="maxPrice"></ion-checkbox>
+    <ion-checkbox [(ngModel)]="gift.doNotExceedPrice"></ion-checkbox>
   </ion-item>
   <ion-item>
     <ion-label>vorher nochmal fragen</ion-label>
-    <ion-checkbox [(ngModel)]="askBeforeBuy"></ion-checkbox>
+    <ion-checkbox [(ngModel)]="gift.doAskBeforeBuy"></ion-checkbox>
   </ion-item>
   <div>&nbsp;</div>
+
   <button ion-button full (click)="addGift()">Geschenk eintragen</button>
 </ion-content>
