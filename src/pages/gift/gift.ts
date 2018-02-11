@@ -10,7 +10,7 @@ import {GiftStore} from "../../providers/giftstore";
   templateUrl: 'gift.html',
 })
 export class GiftPage {
-  public base64Image: string;
+  public base64Image: string = "";
 
   gift: Gift = new Gift();
   public changing: boolean = false;
@@ -19,12 +19,10 @@ export class GiftPage {
               private _nav: NavController,
               private _navParams: NavParams,
               private giftStore: GiftStore) {
-    this.base64Image = "";
     if (_navParams.data.hasOwnProperty("gift")) {
       this.gift = _navParams.get("gift") as Gift;
       this.changing = true;
     }
-    console.log("changing? " + this.changing);
   }
 
   takePicture() {
