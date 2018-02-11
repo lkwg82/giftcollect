@@ -19,8 +19,11 @@ export class GiftPage {
               private _nav: NavController,
               private _navParams: NavParams,
               private giftStore: GiftStore) {
-    if (_navParams.data.hasOwnProperty("gift")) {
-      this.gift = _navParams.get("gift") as Gift;
+  }
+
+  ionViewDidLoad() {
+    if (this._navParams.data.hasOwnProperty("gift")) {
+      this.gift = this._navParams.get("gift") as Gift;
       this.changing = true;
     }
   }

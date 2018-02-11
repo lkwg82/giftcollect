@@ -5,12 +5,7 @@ import {AngularFireAuth} from 'angularfire2/auth';
 // Do not import from 'firebase' as you'll lose the tree shaking benefits
 import * as firebase from 'firebase/app';
 
-/*
-  Generated class for the AuthServiceProvider provider.
 
-  See https://angular.io/docs/ts/latest/guide/dependency-injection.html
-  for more info on providers and Angular DI.
-*/
 @Injectable()
 export class AuthServiceProvider {
   private currentUser: firebase.User;
