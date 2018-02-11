@@ -6,14 +6,14 @@ import {GiftStore} from "../../providers/giftstore";
 
 
 @Component({
-  selector: 'page-new-gift',
-  templateUrl: 'new-gift.html',
+  selector: 'page-gift',
+  templateUrl: 'gift.html',
 })
-export class NewGiftPage {
+export class GiftPage {
   public base64Image: string;
 
   gift: Gift = new Gift();
-  changing: boolean = false;
+  public changing: boolean = false;
 
   constructor(private camera: Camera,
               private _nav: NavController,
@@ -24,6 +24,7 @@ export class NewGiftPage {
       this.gift = _navParams.get("gift") as Gift;
       this.changing = true;
     }
+    console.log("changing? " + this.changing);
   }
 
   takePicture() {
@@ -39,12 +40,8 @@ export class NewGiftPage {
     });
   }
 
-  addGift() {
-    if (this.changing) {
-      this.giftStore.update(this.gift);
-    } else {
-      this.giftStore.add(this.gift);
-    }
+  addOrUpdateGift() {
+    this.giftStore.addOrUpdate(this.gift);
     this._nav.pop();
   }
 }

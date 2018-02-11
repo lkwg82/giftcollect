@@ -1,15 +1,7 @@
-<!--
-  Generated template for the NewGiftPage page.
-
-  See http://ionicframework.com/docs/components/#navigation for more info on
-  Ionic pages and navigation.
--->
 <ion-header>
-
   <ion-navbar>
-    <ion-title>
-      neues Geschenk anlegen
-    </ion-title>
+    <ion-title *ngIf="!changing">neues Geschenk anlegen</ion-title>
+    <ion-title *ngIf="changing">Geschenk ändern</ion-title>
   </ion-navbar>
 </ion-header>
 
@@ -48,5 +40,6 @@
   </ion-item>
   <div>&nbsp;</div>
 
-  <button ion-button full (click)="addGift()">Geschenk eintragen</button>
+  <button *ngIf="!changing" ion-button full (click)="addOrUpdateGift()">eintragen</button>
+  <button *ngIf="changing" ion-button full (click)="addOrUpdateGift()">speichern</button>
 </ion-content>

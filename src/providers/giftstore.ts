@@ -14,22 +14,20 @@ export class GiftStore {
     this.gifts.set(gift.id, gift);
   }
 
-  add(gift: Gift) {
-    this.update(gift);
-  }
-
-  update(gift: Gift) {
+  addOrUpdate(gift: Gift): Gift {
     let found = this.gifts.get(gift.id);
     if (found == null) {
       let g = {...gift};
       g.id = uuid();
       this.gifts.set(g.id, g);
+      return g;
     } else {
       found.title = gift.title;
       found.description = gift.description;
       found.estimatedPrice = gift.estimatedPrice;
       found.doNotExceedPrice = gift.doNotExceedPrice;
       found.doAskBeforeBuy = gift.doAskBeforeBuy;
+      return found;
     }
   }
 

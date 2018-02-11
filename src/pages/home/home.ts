@@ -3,7 +3,7 @@ import {AuthServiceProvider} from "../../providers/auth-service/auth-service";
 import * as firebase from 'firebase/app';
 import {GiftStore} from "../../providers/giftstore";
 import {NavController} from "ionic-angular";
-import {NewGiftPage} from "../new-gift/new-gift";
+import {GiftPage} from "../gift/gift";
 import {Gift} from "../../app/domain/gift";
 
 @Component({
@@ -25,10 +25,10 @@ export class HomePage {
   }
 
   addGift() {
-    this._navCtr.push(NewGiftPage);
+    this._navCtr.push(GiftPage);
   }
 
   itemSelected(gift: Gift) {
-    this._navCtr.push(NewGiftPage, {"gift": gift})
+    this._navCtr.push(GiftPage, {"gift": gift})
   }
 }

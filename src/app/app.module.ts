@@ -13,7 +13,7 @@ import {MyApp} from './app.component';
 import {AboutPage} from "../pages/about/about";
 import {HomePage} from '../pages/home/home';
 import {LoginPage} from "../pages/login/login";
-import {NewGiftPage} from "../pages/new-gift/new-gift";
+import {GiftPage} from "../pages/gift/gift";
 import {Camera} from "@ionic-native/camera";
 import {GiftStore} from "../providers/giftstore";
 
@@ -32,7 +32,7 @@ export const firebaseConfig = {
     AboutPage,
     HomePage,
     LoginPage,
-    NewGiftPage,
+    GiftPage,
   ],
   imports: [
     BrowserModule,
@@ -45,7 +45,7 @@ export const firebaseConfig = {
     AboutPage,
     LoginPage,
     HomePage,
-    NewGiftPage,
+    GiftPage,
   ],
   providers: [
     AngularFireAuth,
