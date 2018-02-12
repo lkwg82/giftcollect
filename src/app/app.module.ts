@@ -16,7 +16,7 @@ import {GiftPage} from "../pages/gift/gift";
 
 import {AuthServiceProvider} from '../providers/auth-service/auth-service';
 import {GiftStorage, GiftStore} from "../providers/giftstore";
-import {AngularFirestore} from "angularfire2/firestore";
+import {AngularFirestore, AngularFirestoreModule} from "angularfire2/firestore";
 
 export const firebaseConfig = {
   apiKey: "AIzaSyAxO7i-Ekduq6VbeLkouU6pFnOiD28xCLg",
@@ -38,7 +38,8 @@ export const firebaseConfig = {
   imports: [
     BrowserModule,
     IonicModule.forRoot(MyApp),
-    AngularFireModule.initializeApp(firebaseConfig)
+    AngularFireModule.initializeApp(firebaseConfig),
+    AngularFirestoreModule.enablePersistence()
   ],
   bootstrap: [IonicApp],
   entryComponents: [
