@@ -69,5 +69,4 @@ export class AuthServiceProvider {
       return '';
     }
   }
-
 }

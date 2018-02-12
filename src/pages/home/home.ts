@@ -17,17 +17,17 @@ export class HomePage {
   constructor(private _auth: AuthServiceProvider,
               public giftStore: GiftStore,
               private _navCtr: NavController) {
-    let authState = this._auth.afAuth.authState;
-    authState.subscribe((user: firebase.User) => {
-      if (user) {
-        this.username = user.displayName;
-      }
-    });
   }
 
   ionViewDidLoad() {
     console.log("homepage loaded")
-    this.gifts = this.giftStore.list();
+    let authState = this._auth.afAuth.authState;
+    authState.subscribe((user: firebase.User) => {
+      if (user) {
+        this.username = user.displayName;
+        this.gifts = this.giftStore.list();
+      }
+    });
   }
 
   addGift() {

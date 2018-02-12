@@ -39,13 +39,15 @@ export class GiftStorage {
 
   list(): Gift[] {
     // let baseKey = this.userKey + "-gift-";
+
     let gifts: Gift[] = [];
     this.database.collection("/gifts").ref
-    // .where("owner", "==", this.auth.userId)
+      .where("owner", "==", this.auth.userId)
       .get()
       .then((snapshot) => {
         snapshot.forEach((doc) => {
-          console.log(doc.id, " => ", doc.data());
+          // console.log(doc.id, " => ", doc.data());
+          console.log(doc);
           gifts.push(<Gift>doc.data());
         })
       }).catch((error) => {
