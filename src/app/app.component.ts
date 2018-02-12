@@ -12,7 +12,7 @@ import {LoginPage} from "../pages/login/login";
 })
 export class MyApp {
   @ViewChild('mycontent') nav: NavController;
-  rootPage: any = LoginPage;
+  rootPage: any = HomePage;
 
   constructor(platform: Platform,
               statusBar: StatusBar,
@@ -23,8 +23,8 @@ export class MyApp {
       // Here you can do any higher level native things you might need.
 
       // TODO
-      // statusBar.styleDefault();
-      // splashScreen.hide();
+      statusBar.styleDefault();
+      splashScreen.hide();
     });
   }
 

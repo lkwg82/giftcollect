@@ -16,7 +16,7 @@
     </button>
   </ion-fab>
   <ion-list>
-    <button ion-item *ngFor="let gift of giftStore.list()" (click)="itemSelected(gift)">
+    <button ion-item *ngFor="let gift of gifts" (click)="itemSelected(gift)">
       {{ gift.title }}
     </button>
   </ion-list>

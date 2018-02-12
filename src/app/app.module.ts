@@ -1,11 +1,10 @@
 import {BrowserModule} from '@angular/platform-browser';
 import {ErrorHandler, NgModule} from '@angular/core';
 import {IonicApp, IonicErrorHandler, IonicModule} from 'ionic-angular';
+import {Camera} from "@ionic-native/camera";
 import {SplashScreen} from '@ionic-native/splash-screen';
 import {StatusBar} from '@ionic-native/status-bar';
-
 import {AngularFireModule} from "angularfire2";
-import {AuthServiceProvider} from '../providers/auth-service/auth-service';
 import {AngularFireAuth} from 'angularfire2/auth';
 
 import {MyApp} from './app.component';
@@ -14,8 +13,10 @@ import {AboutPage} from "../pages/about/about";
 import {HomePage} from '../pages/home/home';
 import {LoginPage} from "../pages/login/login";
 import {GiftPage} from "../pages/gift/gift";
-import {Camera} from "@ionic-native/camera";
-import {GiftStore} from "../providers/giftstore";
+
+import {AuthServiceProvider} from '../providers/auth-service/auth-service';
+import {GiftStorage, GiftStore} from "../providers/giftstore";
+import {AngularFirestore} from "angularfire2/firestore";
 
 export const firebaseConfig = {
   apiKey: "AIzaSyAxO7i-Ekduq6VbeLkouU6pFnOiD28xCLg",
@@ -49,13 +50,16 @@ export const firebaseConfig = {
   ],
   providers: [
     AngularFireAuth,
+    AngularFirestore,
     AuthServiceProvider,
     Camera,
     GiftStore,
+    GiftStorage,
     SplashScreen,
     StatusBar,
     {provide: ErrorHandler, useClass: IonicErrorHandler}
   ]
 })
+
 export class AppModule {
 }

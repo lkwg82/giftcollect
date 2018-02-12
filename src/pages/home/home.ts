@@ -12,6 +12,7 @@ import {Gift} from "../../app/domain/gift";
 })
 export class HomePage {
   username;
+  gifts: Gift[] = [];
 
   constructor(private _auth: AuthServiceProvider,
               public giftStore: GiftStore,
@@ -22,6 +23,11 @@ export class HomePage {
         this.username = user.displayName;
       }
     });
+  }
+
+  ionViewDidLoad() {
+    console.log("homepage loaded")
+    this.gifts = this.giftStore.list();
   }
 
   addGift() {
