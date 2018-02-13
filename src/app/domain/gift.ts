@@ -5,7 +5,7 @@ export class Gift {
   public estimatedPrice: number = 0;
   public doNotExceedPrice: boolean = false;
   public doAskBeforeBuy: boolean = false;
-  public owner:string;
+  public owner: string;
 
   constructor(title?: string) {
     this.title = title;

@@ -25,7 +25,7 @@ export class HomePage {
     authState.subscribe((user: firebase.User) => {
       if (user) {
         this.username = user.displayName;
-        this.gifts = this.giftStore.list();
+        this.giftStore.list().subscribe((gifts) => this.gifts = gifts)
       }
     });
   }

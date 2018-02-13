@@ -42,8 +42,14 @@ export class GiftPage {
   }
 
   addOrUpdateGift() {
-    this.giftStore.addOrUpdate(this.gift);
-    this._nav.pop();
+    this.giftStore.addOrUpdate(this.gift)
+      .then(() => {
+        this._nav.pop();
+      })
+      .catch((reason) => {
+        console.error("failed to add gift: " + reason);
+        this._nav.pop();
+      })
   }
 }
 

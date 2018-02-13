@@ -4,6 +4,10 @@ import {Gift} from "../app/domain/gift";
 import {AuthServiceProvider} from "./auth-service/auth-service";
 import uuid from 'uuid/v4'
 import {AngularFirestore} from "angularfire2/firestore";
+import * as firebase from "firebase/app";
+import {Observer} from "rxjs/Observer";
+import {Observable} from "rxjs/Observable";
+import DocumentSnapshot = firebase.firestore.DocumentSnapshot;
 
 @Injectable()
 export class GiftStorage {
@@ -12,24 +16,29 @@ export class GiftStorage {
               private database: AngularFirestore) {
   }
 
-
-  get userKey(): string {
-    return "user-" + this.auth.userId
-  }
-
-  getGiftById(id: string): Promise<Gift> {
+  getGiftById(id: string): Observable<Gift> {
     console.log("id" + id);
-    return null;//this.storage.get(key);
+
+    let querySnapshotPromise = this.database
+      .collection("/gifts")
+      .ref
+      .doc(id)
+      .get();
+
+    return Observable.create((observer: Observer<Gift>) => {
+      querySnapshotPromise.then((snapshot: DocumentSnapshot) => {
+        observer.next(<Gift>snapshot.data());
+        observer.complete();
+      }).catch((error) => {
+        observer.error("Error getting documents: " + error);
+      });
+    });
   }
 
-  insert(gift: Gift): void {
-    gift.id = uuid();
-    gift.owner = this.userKey;
-
-    let gifts = this.database.collection("/gifts");
-    gifts.add(this.asData(gift)).then((data) => {
-      console.log("data: ", data);
-    });
+  update(gift: Gift): Promise<void> {
+    return this.database.collection("/gifts")
+      .doc(gift.id)
+      .set(this.asData(gift));
   }
 
   // see https://github.com/firebase/firebase-js-sdk/issues/311
@@ -37,51 +46,46 @@ export class GiftStorage {
     return JSON.parse(JSON.stringify(gift));
   }
 
-  list(): Gift[] {
-    // let baseKey = this.userKey + "-gift-";
-
-    let gifts: Gift[] = [];
-    this.database.collection("/gifts").ref
-      .where("owner", "==", this.auth.userId)
-      .get()
-      .then((snapshot) => {
-        snapshot.forEach((doc) => {
-          // console.log(doc.id, " => ", doc.data());
-          console.log(doc);
-          gifts.push(<Gift>doc.data());
+  list(): Observable<Gift[]> {
+    return Observable.create((observer: Observer<Gift[]>) => {
+      this.database.collection("/gifts").ref
+        .where("owner", "==", this.auth.userId)
+        .get()
+        .then((snapshot) => {
+          let gifts: Gift[] = [];
+          snapshot.forEach((doc) => {
+            // console.log(doc.id, " => ", doc.data());
+            console.log(doc);
+            gifts.push(<Gift>doc.data());
+          });
+          observer.next(gifts);
+          observer.complete();
         })
-      }).catch((error) => {
-      console.error("Error getting documents: ", error);
-    });
-    return gifts;
+        .catch((error) => {
+          observer.error("Error getting documents: " + error);
+        });
+    })
   }
 }
 
 @Injectable()
 export class GiftStore {
 
-  constructor(private store: GiftStorage) {
+  constructor(private auth: AuthServiceProvider,
+              private storage: GiftStorage) {
     console.log("started giftstore");
   }
 
-  addOrUpdate(gift: Gift): void {
-    this.store.insert(gift);
-    // this.store.getGiftById(gift.id).then(function (found: Gift) {
-    //   let g = {...gift};
-    //   if (found == null) {
-    //     g.id = uuid();
-    //   }
-    //   this.store.insert(g.id, g)
-    //     .catch((reason) => {
-    //       console.log('Handle rejected promise (' + reason + ') here.');
-    //     });
-    // }).catch((reason) => {
-    //   console.log('Handle rejected promise (' + reason + ') here.');
-    // });
+  addOrUpdate(gift: Gift): Promise<void> {
+    if (gift.id == null) {
+      gift.id = uuid();
+      gift.owner = this.auth.userId;
+    }
+    return this.storage.update(gift);
   }
 
-  list(): Gift[] {
-    return this.store.list();
+  list(): Observable<Gift[]> {
+    return this.storage.list();
   }
 }
 
