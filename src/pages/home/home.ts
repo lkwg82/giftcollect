@@ -11,7 +11,7 @@ import {Gift} from "../../app/domain/gift";
   templateUrl: 'home.html'
 })
 export class HomePage {
-  username;
+  username: string;
   gifts: Gift[] = [];
 
   constructor(private _auth: AuthServiceProvider,
@@ -24,7 +24,9 @@ export class HomePage {
     let authState = this._auth.afAuth.authState;
     authState.subscribe((user: firebase.User) => {
       if (user) {
-        this.username = user.displayName;
+        if (user.displayName) {
+          this.username = user.displayName;
+        }
         this.giftStore.list().subscribe((gifts) => this.gifts = gifts)
       }
     });

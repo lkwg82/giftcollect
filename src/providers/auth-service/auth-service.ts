@@ -32,8 +32,12 @@ export class AuthServiceProvider {
     else {
       let providerData = this.currentUser.providerData;
       if (providerData != null && providerData.length > 0) {
-        let userInfo: UserInfo = providerData[0];
-        return userInfo.providerId + "-" + userInfo.uid;
+        let userInfo: UserInfo | null = providerData[0];
+        if (userInfo == null) {
+          return ""
+        } else {
+          return userInfo.providerId + "-" + userInfo.uid;
+        }
       }
       else {
         return "";
@@ -62,7 +66,7 @@ export class AuthServiceProvider {
     this.afAuth.auth.signOut();
   }
 
-  displayName(): string {
+  displayName(): string | null {
     if (this.currentUser !== null) {
       return this.currentUser.displayName;
     } else {

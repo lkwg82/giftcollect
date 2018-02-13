@@ -12,7 +12,7 @@ import {GiftStore} from "../../providers/giftstore";
 export class GiftPage {
   public base64Image: string = "";
 
-  gift: Gift = new Gift();
+  gift: Gift;
   public changing: boolean = false;
 
   constructor(private camera: Camera,

@@ -4,10 +4,8 @@ import {Gift} from "../app/domain/gift";
 import {AuthServiceProvider} from "./auth-service/auth-service";
 import uuid from 'uuid/v4'
 import {AngularFirestore} from "angularfire2/firestore";
-import * as firebase from "firebase/app";
 import {Observer} from "rxjs/Observer";
 import {Observable} from "rxjs/Observable";
-import DocumentSnapshot = firebase.firestore.DocumentSnapshot;
 
 @Injectable()
 export class GiftStorage {
@@ -16,24 +14,25 @@ export class GiftStorage {
               private database: AngularFirestore) {
   }
 
-  getGiftById(id: string): Observable<Gift> {
-    console.log("id" + id);
+  // getGiftById(id: string): Observable<Gift> {
+  //   console.log("id" + id);
+  //
+  //   let querySnapshotPromise = this.database
+  //     .collection("/gifts")
+  //     .ref
+  //     .doc(id)
+  //     .get();
+  //
+  //   return Observable.create((observer: Observer<Gift>) => {
+  //     querySnapshotPromise.then((snapshot: DocumentSnapshot) => {
+  //       observer.next(<Gift>snapshot.data());
+  //       observer.complete();
+  //     }).catch((error) => {
+  //       observer.error("Error getting documents: " + error);
+  //     });
+  //   });
+  // }
 
-    let querySnapshotPromise = this.database
-      .collection("/gifts")
-      .ref
-      .doc(id)
-      .get();
-
-    return Observable.create((observer: Observer<Gift>) => {
-      querySnapshotPromise.then((snapshot: DocumentSnapshot) => {
-        observer.next(<Gift>snapshot.data());
-        observer.complete();
-      }).catch((error) => {
-        observer.error("Error getting documents: " + error);
-      });
-    });
-  }
 
   update(gift: Gift): Promise<void> {
     return this.database.collection("/gifts")
