@@ -5,6 +5,7 @@ import {GiftStore} from "../../providers/giftstore";
 import {NavController} from "ionic-angular";
 import {GiftPage} from "../gift/gift";
 import {Gift} from "../../app/domain/gift";
+import {UserStore} from "../../providers/userstore";
 
 @Component({
   selector: 'page-home',
@@ -13,9 +14,12 @@ import {Gift} from "../../app/domain/gift";
 export class HomePage {
   username: string;
   gifts: Gift[] = [];
+  userApproved: boolean;
+  initialized: boolean;
 
   constructor(private _auth: AuthServiceProvider,
               public giftStore: GiftStore,
+              private userStore: UserStore,
               private _navCtr: NavController) {
   }
 
@@ -23,17 +27,30 @@ export class HomePage {
     console.log("homepage loaded")
     let authState = this._auth.afAuth.authState;
     authState.subscribe((user: firebase.User) => {
+      console.log("user ", user);
       if (user) {
         if (user.displayName) {
           this.username = user.displayName;
         }
-        this.giftStore.list().subscribe((gifts) => this.gifts = gifts)
+
+        this.userStore.isApproved().then(approved => {
+          if (approved) {
+            this.userApproved = true;
+            console.log("approved");
+            this.giftStore.list().subscribe((gifts) => this.gifts = gifts)
+          } else {
+            console.log("not approved");
+          }
+          this.initialized = true;
+        }).catch(error => console.error(error));
       }
     });
   }
 
   ionViewWillEnter() {
-    this.giftStore.list().subscribe((gifts) => this.gifts = gifts)
+    if (this.userApproved) {
+      this.giftStore.list().subscribe((gifts) => this.gifts = gifts);
+    }
   }
 
   addGift() {

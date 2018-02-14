@@ -55,8 +55,7 @@ export class GiftStorage {
 @Injectable()
 export class GiftStore {
 
-  constructor(private auth: AuthServiceProvider,
-              private storage: GiftStorage) {
+  constructor(private storage: GiftStorage) {
     console.log("started giftstore");
   }
 

@@ -20,6 +20,10 @@ export class AuthServiceProvider {
     return this.currentUser.uid
   }
 
+  get email(): string {
+    return this.currentUser.email || "not set";
+  }
+
   signInWithGoogle(): Promise<void> {
     let authProvider = new firebase.auth.GoogleAuthProvider();
     // https://developers.google.com/identity/protocols/OpenIDConnect#authenticationuriparameters
@@ -30,7 +34,7 @@ export class AuthServiceProvider {
     // let authServiceProvider = this;
     let auth = this.afAuth.auth;
 
-    return auth.signInWithPopup(authProvider).then((result) => {
+    return auth.signInWithRedirect(authProvider).then((result) => {
       // this.additionalUserInfo = result.additionalUserInfo
     }).catch(function (error) {
       console.error(error);
@@ -41,7 +45,7 @@ export class AuthServiceProvider {
     this.afAuth.auth.signOut();
   }
 
-  displayName(): string | null {
-    return this.currentUser.displayName;
+  get displayName(): string {
+    return this.currentUser.displayName || "not set";
   }
 }

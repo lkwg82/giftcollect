@@ -17,6 +17,7 @@ import {GiftPage} from "../pages/gift/gift";
 import {AuthServiceProvider} from '../providers/auth-service/auth-service';
 import {GiftStorage, GiftStore} from "../providers/giftstore";
 import {AngularFirestore, AngularFirestoreModule} from "angularfire2/firestore";
+import {UserStorage, UserStore} from "../providers/userstore";
 
 export const firebaseConfig = {
   apiKey: "AIzaSyAxO7i-Ekduq6VbeLkouU6pFnOiD28xCLg",
@@ -58,6 +59,8 @@ export const firebaseConfig = {
     GiftStorage,
     SplashScreen,
     StatusBar,
+    UserStore,
+    UserStorage,
     {provide: ErrorHandler, useClass: IonicErrorHandler}
   ]
 })
