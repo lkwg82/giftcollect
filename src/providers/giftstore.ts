@@ -15,6 +15,9 @@ export class GiftStorage {
 
   update(gift: Gift): Promise<void> {
     return this.database.collection("/gifts")
+      .doc(this.auth.uid)
+      .ref
+      .collection("gifts")
       .doc(gift.id)
       .set(this.asData(gift));
   }
@@ -26,8 +29,11 @@ export class GiftStorage {
 
   list(): Observable<Gift[]> {
     return Observable.create((observer: Observer<Gift[]>) => {
-      this.database.collection("/gifts").ref
-        .where("owner", "==", this.auth.userId)
+      this.database.collection("/gifts")
+        .doc(this.auth.uid)
+        .collection("gifts")
+        .ref
+        .orderBy("title")
         .get()
         .then((snapshot) => {
           let gifts: Gift[] = [];
@@ -42,7 +48,7 @@ export class GiftStorage {
         .catch((error) => {
           observer.error("Error getting documents: " + error);
         });
-    })
+    });
   }
 }
 
@@ -55,7 +61,6 @@ export class GiftStore {
   }
 
   addOrUpdate(gift: Gift): Promise<void> {
-    gift.owner = this.auth.userId;
     return this.storage.update(gift);
   }
 
