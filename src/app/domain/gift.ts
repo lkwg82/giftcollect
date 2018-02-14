@@ -1,13 +1,16 @@
-export class Gift {
-  public id: string;
-  public title: string = "";
-  public description: string = "";
-  public estimatedPrice: number = 0;
-  public doNotExceedPrice: boolean = false;
-  public doAskBeforeBuy: boolean = false;
-  public owner: string;
+import uuid from "uuid/v4";
 
-  constructor(title?: string) {
+export class Gift {
+  id: string;
+  title: string;
+  description: string;
+  estimatedPrice: number;
+  doNotExceedPrice: boolean;
+  doAskBeforeBuy: boolean;
+  owner: string;
+
+  constructor(title: string) {
+    this.id = uuid();
     this.title = title;
   }
 }

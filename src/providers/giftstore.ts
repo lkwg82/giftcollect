@@ -2,7 +2,6 @@ import {Injectable} from "@angular/core";
 
 import {Gift} from "../app/domain/gift";
 import {AuthServiceProvider} from "./auth-service/auth-service";
-import uuid from 'uuid/v4'
 import {AngularFirestore} from "angularfire2/firestore";
 import {Observer} from "rxjs/Observer";
 import {Observable} from "rxjs/Observable";
@@ -13,26 +12,6 @@ export class GiftStorage {
   constructor(private auth: AuthServiceProvider,
               private database: AngularFirestore) {
   }
-
-  // getGiftById(id: string): Observable<Gift> {
-  //   console.log("id" + id);
-  //
-  //   let querySnapshotPromise = this.database
-  //     .collection("/gifts")
-  //     .ref
-  //     .doc(id)
-  //     .get();
-  //
-  //   return Observable.create((observer: Observer<Gift>) => {
-  //     querySnapshotPromise.then((snapshot: DocumentSnapshot) => {
-  //       observer.next(<Gift>snapshot.data());
-  //       observer.complete();
-  //     }).catch((error) => {
-  //       observer.error("Error getting documents: " + error);
-  //     });
-  //   });
-  // }
-
 
   update(gift: Gift): Promise<void> {
     return this.database.collection("/gifts")
@@ -76,10 +55,7 @@ export class GiftStore {
   }
 
   addOrUpdate(gift: Gift): Promise<void> {
-    if (gift.id == null) {
-      gift.id = uuid();
-      gift.owner = this.auth.userId;
-    }
+    gift.owner = this.auth.userId;
     return this.storage.update(gift);
   }
 

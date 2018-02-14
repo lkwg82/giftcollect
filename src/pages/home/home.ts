@@ -32,6 +32,10 @@ export class HomePage {
     });
   }
 
+  ionViewWillEnter() {
+    this.giftStore.list().subscribe((gifts) => this.gifts = gifts)
+  }
+
   addGift() {
     this._navCtr.push(GiftPage);
   }
