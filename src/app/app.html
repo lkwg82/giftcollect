@@ -6,10 +6,17 @@
   </ion-header>
   <ion-content>
     <ion-list>
-      <button ion-button full menuClose (click)="signOut()">
+      <button ion-item menuClose (click)="signOut()">
         <ion-icon name="log-out"></ion-icon>
         logout
       </button>
+      <ion-item-group *ngIf="approved">
+        <ion-item-divider color="light">admin</ion-item-divider>
+        <button ion-item menuClose (click)="showCandidates()" [ngClass]="classes">
+          <ion-icon name="people"></ion-icon>
+          Kandidaten <span candidatesCount *ngIf="candidatesCount>0">{{candidatesCount}}</span>
+        </button>
+      </ion-item-group>
     </ion-list>
   </ion-content>
 </ion-menu>
