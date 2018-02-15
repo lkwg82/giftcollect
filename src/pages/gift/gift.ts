@@ -1,6 +1,6 @@
-import {Component} from '@angular/core';
+import {Component, ViewChild} from '@angular/core';
 import {Camera} from '@ionic-native/camera';
-import {NavController, NavParams} from "ionic-angular";
+import {NavController, NavParams, TextInput} from "ionic-angular";
 import {Gift} from "../../app/domain/gift";
 import {GiftStore} from "../../providers/giftstore";
 import {AuthServiceProvider} from "../../providers/auth-service/auth-service";
@@ -11,6 +11,7 @@ import {AuthServiceProvider} from "../../providers/auth-service/auth-service";
              templateUrl: 'gift.html',
            })
 export class GiftPage {
+  @ViewChild('title') title: TextInput;
   public base64Image: string = "";
 
   gift: Gift = new Gift("");
@@ -29,6 +30,7 @@ export class GiftPage {
       this.changing = true;
     }
     this.gift.owner = this._auth.uid;
+    this.title.setFocus();
   }
 
   takePicture() {
