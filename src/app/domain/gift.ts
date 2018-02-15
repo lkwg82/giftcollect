@@ -15,7 +15,7 @@ export class Gift {
   }
 
   // see https://github.com/firebase/firebase-js-sdk/issues/311
-  asData(): object {
-    return JSON.parse(JSON.stringify(this));
+  static asData(gift: Gift): object {
+    return JSON.parse(JSON.stringify(gift));
   }
 }

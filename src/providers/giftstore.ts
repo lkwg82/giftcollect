@@ -16,7 +16,7 @@ export class GiftStorage {
 
   update(gift: Gift): Promise<void> {
     return this._docRef(gift)
-               .set(gift.asData(), this.setOptions);
+               .set(Gift.asData(gift), this.setOptions);
   }
 
   delete(gift: Gift): Promise<void> {
