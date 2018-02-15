@@ -41,7 +41,7 @@ class UserProfile {
 
 @Injectable()
 export class UserStorage {
-
+  private readonly setOptions = {merge: true};
   private readonly col_user_candidates = "/user_candidates";
   private readonly col_users = "/user_profiles";
 
@@ -66,7 +66,7 @@ export class UserStorage {
     return this.database
                .collection(this.col_user_candidates)
                .doc(candidate.userId).ref
-               .set(candidate.asObject())
+               .set(candidate.asObject(), this.setOptions)
                .then(_ => console.log("candidate inserted"))
                .catch((reason) => console.error(reason));
   }
@@ -99,7 +99,7 @@ export class UserStorage {
                  } else {
                    let candidate = <UserCandidate>candidateDoc.data();
                    let userProfile = UserProfile.fromCandidate(candidate);
-                   tx.set(userDocRef, userProfile.asObject())
+                   tx.set(userDocRef, userProfile.asObject(), this.setOptions)
                      .delete(candidateDocRef);
                  }
                })
