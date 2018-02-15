@@ -37,6 +37,9 @@ export class CurrentUser {
           this._store.isApproved().then(approved => {
             this.userApproved = approved;
             observer.next(new State(true, approved));
+            if (!approved) {
+              this._store.requestApproval();
+            }
           }).catch(error => console.error(error));
         } else {
           observer.next(new State(false, false));

@@ -2,6 +2,19 @@ import {Injectable} from "@angular/core";
 import {AuthServiceProvider} from "./auth-service/auth-service";
 import {AngularFirestore} from "angularfire2/firestore";
 
+class UserCandidate {
+  constructor(readonly email: string,
+              readonly displayName: string,
+              readonly lastRequestTime: number,
+              readonly lastRequestTimeReadable: string) {
+  }
+
+  // see https://github.com/firebase/firebase-js-sdk/issues/311
+  asObject(): object {
+    return JSON.parse(JSON.stringify(this));
+  }
+}
+
 @Injectable()
 export class UserStorage {
 
@@ -9,44 +22,34 @@ export class UserStorage {
   }
 
   isApproved(uid: string, email: string, displayName: string): Promise<boolean> {
-    return new Promise((ok, error) => {
+    return new Promise((fullfill, error) => {
       this.database.collection("/users")
         .doc(uid).ref
         .get()
-        .then((snapShot) => ok(snapShot.exists))
+        .then((snapShot) => fullfill(snapShot.exists))
         .catch((reason) => {
-          if (reason.code == "permission-denied") {
-            this.createUserCandidate(uid, email, displayName);
-            ok(false);
-          } else {
-            console.error(reason);
-            error(reason);
-          }
+          console.error(reason);
+          error(reason);
         });
     });
   }
 
-  private createUserCandidate(uid: string, email: string, displayName: string) {
-    this.database.collection("/user_candidates")
+  private createUserCandidate(uid: string, email: string, displayName: string): Promise<void> {
+    let userCandidate = new UserCandidate("" + email, "" + displayName, Date.now(), new Date().toISOString());
+
+    return this.database.collection("/user_candidates")
       .doc(uid).ref
-      .set({
-        "email": "" + email,
-        "displayName": "" + displayName,
-        "lastRequestTime": Date.now(),
-        "lastRequestTimeReadable": new Date().toISOString()
-      })
-      .then(ok => {
-        console.log("candidate inserted");
-      })
-      .catch((reason2) => {
-        console.error(reason2);
-      });
+      .set(userCandidate.asObject())
+      .then(ok => console.log("candidate inserted"))
+      .catch((reason) => console.error(reason));
   }
 
   requestApproval(uid: string, email: string, displayName: string): Promise<void> {
-    return this.isApproved(uid, email, displayName).then(approved => {
-      console.log("approved")
-    })
+    return this.createUserCandidate(uid, email, displayName);
+  }
+
+  candidates() {
+    return this.database.collection("/user_candidates");
   }
 }
 
