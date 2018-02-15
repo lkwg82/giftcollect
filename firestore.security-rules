@@ -1,28 +1,44 @@
 service cloud.firestore {
   match /databases/{database}/documents {
+
+   function isMember(){
+      return request.auth.uid != null && exists(/databases/$(database)/documents/user_profiles/$(request.auth.uid));
+   }
    match /gifts {
     match /{document=**} {
-      // allow read,write: if exists(/databases/$(database)/documents/users/$(request.auth.uid));
-      allow read, write: if request.auth.uid != null;
+      allow read,write: if exists(/databases/$(database)/documents/user_profiles/$(request.auth.uid));
+      // allow read, write: if request.auth.uid != null;
     }
    }
-   match /users/{userId} {
-   	 	allow read,write : if request.auth.uid != null
-                         && request.auth.uid == userId
-   }
    match /user_candidates/{userId} {
+        // candidates can check for existence (first insert)
+        allow list          : if request.auth.uid != null;
+        // members can accept candidates
+        allow get,delete    : if request.auth.uid != null && exists(/databases/$(database)/documents/user_profiles/$(request.auth.uid));
+        // candidates can only change their profile
+        allow create,update : if request.auth.uid != null
+                           && request.auth.uid == userId
+                           && request.resource.data.keys().hasAll(['userId','email', 'displayName','lastRequestTime','lastRequestTimeReadable'])
+                           && request.resource.data.size() == 5
+                           && request.resource.data.userId is string
+                           && request.resource.data.userId.size() < 100
+                           && request.resource.data.email is string
+                           && request.resource.data.email.size() < 256
+                           && request.resource.data.displayName is string
+                           && request.resource.data.displayName.size() < 1024
+                           && request.resource.data.lastRequestTime is int
+                           && request.resource.data.lastRequestTimeReadable is string
+                           && request.resource.data.lastRequestTimeReadable.size() < 25
+                    ;
+      }
+   match /user_profiles/{userId} {
+      // members can
+      //  - insert candidates
+      //  - check if members exist
+      allow create,list: if request.auth.uid != null && exists(/databases/$(database)/documents/user_profiles/$(request.auth.uid));
+      // members only change their profiles
    	 	allow read,write : if request.auth.uid != null
                          && request.auth.uid == userId
-      									 && request.resource.data.keys().hasAll(['email', 'displayName','lastRequestTime','lastRequestTimeReadable'])
-                         && request.resource.data.size() == 4
-                         && request.resource.data.email is string
-                         && request.resource.data.email.size() < 256
-                         && request.resource.data.displayName is string
-                         && request.resource.data.displayName.size() < 1024
-                         && request.resource.data.lastRequestTime is int
-                         && request.resource.data.lastRequestTimeReadable is string
-                         && request.resource.data.lastRequestTimeReadable.size() < 25
-                         ;
    }
   }
 }
