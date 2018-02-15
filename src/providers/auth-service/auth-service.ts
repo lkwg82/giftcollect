@@ -5,6 +5,7 @@ import {AngularFireAuth} from 'angularfire2/auth';
 // Do not import from 'firebase' as you'll lose the tree shaking benefits
 import * as firebase from 'firebase/app';
 import {Observable} from "rxjs/Observable";
+import {Observer} from "rxjs/Observer";
 
 @Injectable()
 export class AuthServiceProvider {
@@ -29,9 +30,7 @@ export class AuthServiceProvider {
   signInWithGoogle(): Promise<void> {
     let authProvider = new firebase.auth.GoogleAuthProvider();
     // https://developers.google.com/identity/protocols/OpenIDConnect#authenticationuriparameters
-    authProvider.setCustomParameters({
-      'prompt': 'select_account',
-    });
+    authProvider.setCustomParameters({'prompt': 'select_account',});
 
     // let authServiceProvider = this;
     let auth = this.afAuth.auth;
@@ -49,5 +48,12 @@ export class AuthServiceProvider {
 
   get displayName(): string {
     return this.currentUser.displayName || "not set";
+  }
+
+  get signedOut(): Observable<boolean> {
+    return Observable.create((observer: Observer<boolean>) => {
+      this.state.subscribe((user: firebase.User) => observer.next(user != null));
+    });
+
   }
 }

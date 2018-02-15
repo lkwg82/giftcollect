@@ -8,6 +8,7 @@ import {CurrentUser, State} from "../providers/user/CurrentUser";
 import {ApprovalPage} from "../pages/approval/approval";
 import {UserStore} from "../providers/userstore";
 import {CandidatesPage} from "../pages/candidates/candidates";
+import {AuthServiceProvider} from "../providers/auth-service/auth-service";
 
 @Component({
              templateUrl: 'app.html'
@@ -23,7 +24,8 @@ export class MyApp {
               statusBar: StatusBar,
               splashScreen: SplashScreen,
               private _currentUser: CurrentUser,
-              private _userStore: UserStore) {
+              private _userStore: UserStore,
+              private _auth: AuthServiceProvider) {
     platform.ready().then(() => {
       // Okay, so the platform is ready and our plugins are available.
       // Here you can do any higher level native things you might need.
@@ -41,14 +43,17 @@ export class MyApp {
       if (state.authenticated) {
         this.approved = state.approved;
 
-        this._userStore.candidateValueChanges().subscribe((candidates) => {
-          this.candidatesCount = candidates.length;
-          if (this.candidatesCount == 0) {
-            this.classes = "zero";
-          } else {
-            this.classes = "";
-          }
-        });
+        this._userStore
+            .candidateValueChanges()
+            .takeUntil(this._auth.signedOut)
+            .subscribe((candidates) => {
+              this.candidatesCount = candidates.length;
+              if (this.candidatesCount == 0) {
+                this.classes = "zero";
+              } else {
+                this.classes = "";
+              }
+            });
         if (state.approved) {
           this.nav.setRoot(HomePage);
         } else {
