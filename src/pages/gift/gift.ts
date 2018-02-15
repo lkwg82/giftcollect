@@ -3,12 +3,13 @@ import {Camera} from '@ionic-native/camera';
 import {NavController, NavParams} from "ionic-angular";
 import {Gift} from "../../app/domain/gift";
 import {GiftStore} from "../../providers/giftstore";
+import {AuthServiceProvider} from "../../providers/auth-service/auth-service";
 
 
 @Component({
-  selector: 'page-gift',
-  templateUrl: 'gift.html',
-})
+             selector: 'page-gift',
+             templateUrl: 'gift.html',
+           })
 export class GiftPage {
   public base64Image: string = "";
 
@@ -18,7 +19,8 @@ export class GiftPage {
   constructor(private camera: Camera,
               private _nav: NavController,
               private _navParams: NavParams,
-              private giftStore: GiftStore) {
+              private _giftStore: GiftStore,
+              private _auth: AuthServiceProvider) {
   }
 
   ionViewDidLoad() {
@@ -26,15 +28,16 @@ export class GiftPage {
       this.gift = this._navParams.get("gift") as Gift;
       this.changing = true;
     }
+    this.gift.owner = this._auth.uid;
   }
 
   takePicture() {
     this.camera.getPicture({
-      destinationType: this.camera.DestinationType.DATA_URL,
-      quality: 10,
-      targetWidth: 1000,
-      targetHeight: 1000
-    }).then((imageData) => {
+                             destinationType: this.camera.DestinationType.DATA_URL,
+                             quality: 10,
+                             targetWidth: 1000,
+                             targetHeight: 1000
+                           }).then((imageData) => {
       this.base64Image = "data:image/jpeg;base64," + imageData;
     }, (err) => {
       console.log(err);
@@ -42,7 +45,12 @@ export class GiftPage {
   }
 
   addOrUpdateGift() {
-    this.giftStore.addOrUpdate(this.gift);
+    this._giftStore.addOrUpdate(this.gift);
+    this._nav.pop();
+  }
+
+  delete(gift: Gift) {
+    this._giftStore.delete(gift);
     this._nav.pop();
   }
 }

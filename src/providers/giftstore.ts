@@ -3,53 +3,52 @@ import {Injectable} from "@angular/core";
 import {Gift} from "../app/domain/gift";
 import {AuthServiceProvider} from "./auth-service/auth-service";
 import {AngularFirestore} from "angularfire2/firestore";
-import {Observer} from "rxjs/Observer";
 import {Observable} from "rxjs/Observable";
 
 @Injectable()
 export class GiftStorage {
   private readonly setOptions = {merge: true};
+  private readonly col_gifts = "/gifts";
 
   constructor(private auth: AuthServiceProvider,
               private database: AngularFirestore) {
   }
 
   update(gift: Gift): Promise<void> {
-    return this.database.collection("/gifts")
+    return this._docRef(gift)
+               .set(gift.asData(), this.setOptions);
+  }
+
+  delete(gift: Gift): Promise<void> {
+    if (gift.owner == this.auth.uid) {
+      return this._docRef(gift)
+                 .delete()
+                 .then(() => {
+                   console.log("deleted", gift);
+                   return Promise.resolve();
+                 })
+                 .catch((reason) => {
+                   console.error(reason);
+                   return Promise.reject(reason);
+                 });
+    } else {
+      return Promise.reject("this gift is not owned by you, not allowed to delete");
+    }
+  }
+
+  valueChanges(): Observable<Gift[]> {
+    return this._myGifts()
+               .valueChanges();
+  }
+
+  private _myGifts() {
+    return this.database.collection(this.col_gifts)
                .doc(this.auth.uid)
-               .ref
-               .collection("gifts")
-               .doc(gift.id)
-               .set(this.asData(gift), this.setOptions);
+               .collection<Gift>("gifts");
   }
 
-  // see https://github.com/firebase/firebase-js-sdk/issues/311
-  private asData(gift: Gift): object {
-    return JSON.parse(JSON.stringify(gift));
-  }
-
-  list(): Observable<Gift[]> {
-    return Observable.create((observer: Observer<Gift[]>) => {
-      this.database.collection("/gifts")
-          .doc(this.auth.uid)
-          .collection("gifts")
-          .ref
-          .orderBy("title")
-          .get()
-          .then((snapshot) => {
-            let gifts: Gift[] = [];
-            snapshot.forEach((doc) => {
-              // console.log(doc.id, " => ", doc.data());
-              console.debug(doc);
-              gifts.push(<Gift>doc.data());
-            });
-            observer.next(gifts);
-            observer.complete();
-          })
-          .catch((error) => {
-            observer.error("Error getting documents: " + error);
-          });
-    });
+  private _docRef(gift: Gift) {
+    return this._myGifts().doc(gift.id);
   }
 }
 
@@ -64,8 +63,12 @@ export class GiftStore {
     return this.storage.update(gift);
   }
 
-  list(): Observable<Gift[]> {
-    return this.storage.list();
+  valueChanges(): Observable<Gift[]> {
+    return this.storage.valueChanges();
+  }
+
+  delete(gift: Gift): Promise<void> {
+    return this.storage.delete(gift);
   }
 }
 

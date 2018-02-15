@@ -13,4 +13,9 @@ export class Gift {
     this.id = uuid();
     this.title = title;
   }
+
+  // see https://github.com/firebase/firebase-js-sdk/issues/311
+  asData(): object {
+    return JSON.parse(JSON.stringify(this));
+  }
 }

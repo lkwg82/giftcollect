@@ -1,21 +1,28 @@
 <ion-header>
   <ion-navbar>
-    <ion-title *ngIf="!changing">neues Geschenk anlegen</ion-title>
-    <ion-title *ngIf="changing">Geschenk ändern</ion-title>
+    <ion-title>
+      <span *ngIf="!changing">neues Geschenk anlegen</span>
+      <span *ngIf="changing">Geschenk ändern</span>
+    </ion-title>
+    <ion-buttons end icon-only large *ngIf="changing" (click)="delete(gift)">
+      <button ion-button>
+        <ion-icon name="trash"></ion-icon>
+      </button>
+    </ion-buttons>
   </ion-navbar>
 </ion-header>
 
 <ion-content padding>
   <ion-grid>
     <ion-row>
-      <ion-col>
+      <ion-col col-3>
         <button ion-button round outline (click)="takePicture()">
           <ion-icon name="camera"></ion-icon>
         </button>
       </ion-col>
-      <ion-col col-auto>
+      <ion-col col-9>
         <ion-item>
-          <ion-input type="text" placeholder="Titel" [(ngModel)]="gift.title"></ion-input>
+          <ion-input name="title" type="text" placeholder="Titel" [(ngModel)]="gift.title"></ion-input>
         </ion-item>
       </ion-col>
     </ion-row>
@@ -39,7 +46,8 @@
     <ion-checkbox [(ngModel)]="gift.doAskBeforeBuy"></ion-checkbox>
   </ion-item>
   <div>&nbsp;</div>
-
-  <button *ngIf="!changing" ion-button full (click)="addOrUpdateGift()">eintragen</button>
-  <button *ngIf="changing" ion-button full (click)="addOrUpdateGift()">speichern</button>
+  <button ion-button full (click)="addOrUpdateGift()">
+    <span *ngIf="changing">speichern</span>
+    <span *ngIf="!changing">eintragen</span>
+  </button>
 </ion-content>
