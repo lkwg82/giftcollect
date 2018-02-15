@@ -2,10 +2,10 @@ import {Component, ViewChild} from '@angular/core';
 import {NavController, Platform} from 'ionic-angular';
 import {StatusBar} from '@ionic-native/status-bar';
 import {SplashScreen} from '@ionic-native/splash-screen';
-import * as firebase from 'firebase/app';
-import {AuthServiceProvider} from "../providers/auth-service/auth-service";
 import {LoginPage} from "../pages/login/login";
 import {HomePage} from "../pages/home/home";
+import {CurrentUser, State} from "../providers/user/CurrentUser";
+import {ApprovalPage} from "../pages/approval/approval";
 
 @Component({
   templateUrl: 'app.html'
@@ -17,7 +17,7 @@ export class MyApp {
   constructor(platform: Platform,
               statusBar: StatusBar,
               splashScreen: SplashScreen,
-              private auth: AuthServiceProvider) {
+              private _currentUser: CurrentUser) {
     platform.ready().then(() => {
       // Okay, so the platform is ready and our plugins are available.
       // Here you can do any higher level native things you might need.
@@ -31,10 +31,13 @@ export class MyApp {
   // Wait for the components in MyApp's template to be initialized
   // In this case, we are waiting for the Nav with reference variable of "#myNav"
   ngOnInit() {
-    let authState = this.auth.afAuth.authState;
-    authState.subscribe((user: firebase.User) => {
-      if (user) {
-        this.nav.setRoot(HomePage);
+    this._currentUser.state.subscribe((state: State) => {
+      if (state.authenticated) {
+        if (state.approved) {
+          this.nav.setRoot(HomePage);
+        } else {
+          this.nav.setRoot(ApprovalPage);
+        }
       } else {
         this.nav.setRoot(LoginPage);
       }
@@ -42,7 +45,7 @@ export class MyApp {
   }
 
   signOut(): void {
-    this.auth.signOut();
+    this._currentUser.signOut();
   }
 }
 

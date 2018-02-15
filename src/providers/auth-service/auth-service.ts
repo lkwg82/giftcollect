@@ -4,14 +4,16 @@ import 'rxjs/add/operator/map';
 import {AngularFireAuth} from 'angularfire2/auth';
 // Do not import from 'firebase' as you'll lose the tree shaking benefits
 import * as firebase from 'firebase/app';
+import {Observable} from "rxjs/Observable";
 
 @Injectable()
 export class AuthServiceProvider {
-  private currentUser: firebase.User;
+  currentUser: firebase.User;
+  state: Observable<firebase.User | null>;
 
   constructor(public afAuth: AngularFireAuth) {
-    afAuth.authState.subscribe((user: firebase.User) => {
-      console.log("currentUser", user);
+    this.state = afAuth.authState;
+    this.state.subscribe((user: firebase.User) => {
       this.currentUser = user;
     });
   }

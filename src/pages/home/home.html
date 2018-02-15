@@ -4,48 +4,20 @@
       <ion-icon name="menu"></ion-icon>
     </button>
     <ion-title>
-      Gift Collect ({{username}})
+      Gift Collect ({{currentUser.name}})
     </ion-title>
   </ion-navbar>
 </ion-header>
 
 <ion-content padding>
-  <div *ngIf="!initialized">
-    <ion-card>
-      <ion-card-content>
-        <ion-card-title>
-          Initialisierung
-        </ion-card-title>
-        <p>
-          einen kleinen Moment bitte noch
-        </p>
-      </ion-card-content>
-    </ion-card>
-  </div>
-  <div *ngIf="initialized">
-    <div *ngIf="!userApproved">
-      <ion-card>
-        <ion-card-content>
-          <ion-card-title>
-            Tut mir leid,
-          </ion-card-title>
-          <p>
-            du brauchst noch eine Freischaltung :(
-          </p>
-        </ion-card-content>
-      </ion-card>
-    </div>
-    <div *ngIf="userApproved">
-      <ion-fab right bottom>
-        <button ion-fab color="green" (click)="addGift()">
-          <ion-icon name="add"></ion-icon>
-        </button>
-      </ion-fab>
-      <ion-list>
-        <button ion-item *ngFor="let gift of gifts" (click)="itemSelected(gift)">
-          {{ gift.title }}
-        </button>
-      </ion-list>
-    </div>
-  </div>
+  <ion-fab right bottom>
+    <button ion-fab color="green" (click)="addGift()">
+      <ion-icon name="add"></ion-icon>
+    </button>
+  </ion-fab>
+  <ion-list>
+    <button ion-item *ngFor="let gift of gifts" (click)="itemSelected(gift)">
+      {{ gift.title }}
+    </button>
+  </ion-list>
 </ion-content>

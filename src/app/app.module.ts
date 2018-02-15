@@ -18,6 +18,8 @@ import {AuthServiceProvider} from '../providers/auth-service/auth-service';
 import {GiftStorage, GiftStore} from "../providers/giftstore";
 import {AngularFirestore, AngularFirestoreModule} from "angularfire2/firestore";
 import {UserStorage, UserStore} from "../providers/userstore";
+import {CurrentUser} from "../providers/user/CurrentUser";
+import {ApprovalPage} from "../pages/approval/approval";
 
 export const firebaseConfig = {
   apiKey: "AIzaSyAxO7i-Ekduq6VbeLkouU6pFnOiD28xCLg",
@@ -32,6 +34,7 @@ export const firebaseConfig = {
   declarations: [
     MyApp,
     AboutPage,
+    ApprovalPage,
     HomePage,
     LoginPage,
     GiftPage,
@@ -46,6 +49,7 @@ export const firebaseConfig = {
   entryComponents: [
     MyApp,
     AboutPage,
+    ApprovalPage,
     LoginPage,
     HomePage,
     GiftPage,
@@ -55,6 +59,7 @@ export const firebaseConfig = {
     AngularFirestore,
     AuthServiceProvider,
     Camera,
+    CurrentUser,
     GiftStore,
     GiftStorage,
     SplashScreen,
