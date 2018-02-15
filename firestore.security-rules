@@ -4,11 +4,9 @@ service cloud.firestore {
    function isMember(){
       return request.auth.uid != null && exists(/databases/$(database)/documents/user_profiles/$(request.auth.uid));
    }
-   match /gifts {
-    match /{document=**} {
-      allow read,write: if exists(/databases/$(database)/documents/user_profiles/$(request.auth.uid));
-      // allow read, write: if request.auth.uid != null;
-    }
+   match /gifts/{userId}/gifts/{gift=**} {
+      allow read : if request.auth.uid == userId && isMember();
+      allow write: if request.auth.uid == userId && isMember();
    }
    match /user_candidates/{userId} {
         // candidates can check for existence (first insert)
