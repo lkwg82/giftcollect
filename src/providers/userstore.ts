@@ -3,8 +3,9 @@ import {AuthServiceProvider} from "./auth-service/auth-service";
 import {AngularFirestore} from "angularfire2/firestore";
 import {Observable} from "rxjs/Observable";
 
-class UserCandidate {
-  constructor(readonly email: string,
+export class UserCandidate {
+  constructor(readonly userId: string,
+              readonly email: string,
               readonly displayName: string,
               readonly lastRequestTime: number,
               readonly lastRequestTimeReadable: string) {
@@ -25,7 +26,7 @@ export class UserStorage {
   constructor(private database: AngularFirestore) {
   }
 
-  isApproved(uid: string, email: string, displayName: string): Promise<boolean> {
+  isApproved(uid: string): Promise<boolean> {
     return new Promise((fullfill, error) => {
       this.database.collection(this.col_users)
         .doc(uid).ref
@@ -38,18 +39,12 @@ export class UserStorage {
     });
   }
 
-  private createUserCandidate(uid: string, email: string, displayName: string): Promise<void> {
-    let userCandidate = new UserCandidate("" + email, "" + displayName, Date.now(), new Date().toISOString());
-
+  createUserCandidate(candidate: UserCandidate): Promise<void> {
     return this.database.collection(this.col_user_candidates)
-      .doc(uid).ref
-      .set(userCandidate.asObject())
-      .then(ok => console.log("candidate inserted"))
+      .doc(candidate.userId).ref
+      .set(candidate.asObject())
+      .then(_ => console.log("candidate inserted"))
       .catch((reason) => console.error(reason));
-  }
-
-  requestApproval(uid: string, email: string, displayName: string): Promise<void> {
-    return this.createUserCandidate(uid, email, displayName);
   }
 
   candidateValueChanges(): Observable<UserCandidate[]> {
@@ -65,17 +60,18 @@ export class UserStore {
   }
 
   isApproved(): Promise<boolean> {
-    let uid = this._auth.uid;
-    let email = this._auth.email;
-    let displayName = this._auth.displayName;
-    return this._storage.isApproved(uid, email, displayName);
+    return this._storage.isApproved(this._auth.uid);
   }
 
   requestApproval(): Promise<void> {
-    let uid = this._auth.uid;
-    let email = this._auth.email;
-    let displayName = this._auth.displayName;
-    return this._storage.requestApproval(uid, email, displayName);
+    let userCandidate = new UserCandidate(
+      this._auth.uid,
+      this._auth.email || "",
+      this._auth.displayName || "",
+      Date.now(),
+      new Date().toISOString());
+
+    return this._storage.createUserCandidate(userCandidate);
   }
 
   candidateValueChanges(): Observable<UserCandidate[]> {
