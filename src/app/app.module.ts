@@ -31,47 +31,48 @@ export const firebaseConfig = {
   messagingSenderId: "710928653535"
 };
 
+
 @NgModule({
-  declarations: [
-    MyApp,
-    AboutPage,
-    ApprovalPage,
-    CandidatesPage,
-    HomePage,
-    LoginPage,
-    GiftPage,
-  ],
-  imports: [
-    BrowserModule,
-    IonicModule.forRoot(MyApp),
-    AngularFireModule.initializeApp(firebaseConfig),
-    AngularFirestoreModule.enablePersistence()
-  ],
-  bootstrap: [IonicApp],
-  entryComponents: [
-    MyApp,
-    AboutPage,
-    ApprovalPage,
-    CandidatesPage,
-    LoginPage,
-    HomePage,
-    GiftPage,
-  ],
-  providers: [
-    AngularFireAuth,
-    AngularFirestore,
-    AuthServiceProvider,
-    Camera,
-    CurrentUser,
-    GiftStore,
-    GiftStorage,
-    SplashScreen,
-    StatusBar,
-    UserStore,
-    UserStorage,
-    {provide: ErrorHandler, useClass: IonicErrorHandler}
-  ]
-})
+            declarations: [
+              MyApp,
+              AboutPage,
+              ApprovalPage,
+              CandidatesPage,
+              HomePage,
+              LoginPage,
+              GiftPage,
+            ],
+            imports: [
+              BrowserModule,
+              IonicModule.forRoot(MyApp),
+              AngularFireModule.initializeApp(firebaseConfig),
+              AngularFirestoreModule.enablePersistence()
+            ],
+            bootstrap: [IonicApp],
+            entryComponents: [
+              MyApp,
+              AboutPage,
+              ApprovalPage,
+              CandidatesPage,
+              LoginPage,
+              HomePage,
+              GiftPage,
+            ],
+            providers: [
+              AngularFireAuth,
+              AngularFirestore,
+              AuthServiceProvider,
+              Camera,
+              CurrentUser,
+              GiftStore,
+              GiftStorage,
+              SplashScreen,
+              StatusBar,
+              UserStore,
+              UserStorage,
+              {provide: ErrorHandler, useClass: IonicErrorHandler}
+            ]
+          })
 
 export class AppModule {
 }
