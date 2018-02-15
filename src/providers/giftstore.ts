@@ -39,7 +39,7 @@ export class GiftStorage {
           let gifts: Gift[] = [];
           snapshot.forEach((doc) => {
             // console.log(doc.id, " => ", doc.data());
-            console.log(doc);
+            console.debug(doc);
             gifts.push(<Gift>doc.data());
           });
           observer.next(gifts);
@@ -56,7 +56,7 @@ export class GiftStorage {
 export class GiftStore {
 
   constructor(private storage: GiftStorage) {
-    console.log("started giftstore");
+    console.debug("started giftstore");
   }
 
   addOrUpdate(gift: Gift): Promise<void> {
