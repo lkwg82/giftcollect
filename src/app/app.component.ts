@@ -1,5 +1,5 @@
 import {Component, ViewChild} from '@angular/core';
-import {MenuController, NavController, Platform} from 'ionic-angular';
+import {NavController, Platform} from 'ionic-angular';
 import {StatusBar} from '@ionic-native/status-bar';
 import {SplashScreen} from '@ionic-native/splash-screen';
 import {LoginPage} from "../pages/login/login";
@@ -10,8 +10,8 @@ import {UserStore} from "../providers/userstore";
 import {CandidatesPage} from "../pages/candidates/candidates";
 
 @Component({
-  templateUrl: 'app.html'
-})
+             templateUrl: 'app.html'
+           })
 export class MyApp {
   @ViewChild('mycontent') nav: NavController;
   rootPage: any = LoginPage;
@@ -23,7 +23,6 @@ export class MyApp {
               statusBar: StatusBar,
               splashScreen: SplashScreen,
               private _currentUser: CurrentUser,
-              private _menuCtrl: MenuController,
               private _userStore: UserStore) {
     platform.ready().then(() => {
       // Okay, so the platform is ready and our plugins are available.
@@ -52,7 +51,6 @@ export class MyApp {
         });
         if (state.approved) {
           this.nav.setRoot(HomePage);
-          this.showCandidates();
         } else {
           this.nav.setRoot(ApprovalPage);
         }
