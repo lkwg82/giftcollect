@@ -8,7 +8,7 @@
     <ion-list>
       <button ion-item menuClose (click)="signOut()">
         <ion-icon name="log-out"></ion-icon>
-        logout
+        logout ({{_currentUser.name}})
       </button>
       <ion-item-group *ngIf="approved">
         <ion-item-divider color="light">admin</ion-item-divider>
