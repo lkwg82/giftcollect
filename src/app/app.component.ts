@@ -7,6 +7,7 @@ import {HomePage} from "../pages/home/home";
 import {CurrentUser, State} from "../providers/user/CurrentUser";
 import {ApprovalPage} from "../pages/approval/approval";
 import {UserStore} from "../providers/userstore";
+import {CandidatesPage} from "../pages/candidates/candidates";
 
 @Component({
   templateUrl: 'app.html'
@@ -51,8 +52,7 @@ export class MyApp {
         });
         if (state.approved) {
           this.nav.setRoot(HomePage);
-          // TODO
-          this._menuCtrl.open();
+          this.showCandidates();
         } else {
           this.nav.setRoot(ApprovalPage);
         }
@@ -63,6 +63,7 @@ export class MyApp {
   }
 
   showCandidates(): void {
+    this.nav.push(CandidatesPage)
   }
 
   signOut(): void {

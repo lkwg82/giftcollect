@@ -20,6 +20,7 @@ import {AngularFirestore, AngularFirestoreModule} from "angularfire2/firestore";
 import {UserStorage, UserStore} from "../providers/userstore";
 import {CurrentUser} from "../providers/user/CurrentUser";
 import {ApprovalPage} from "../pages/approval/approval";
+import {CandidatesPage} from "../pages/candidates/candidates";
 
 export const firebaseConfig = {
   apiKey: "AIzaSyAxO7i-Ekduq6VbeLkouU6pFnOiD28xCLg",
@@ -35,6 +36,7 @@ export const firebaseConfig = {
     MyApp,
     AboutPage,
     ApprovalPage,
+    CandidatesPage,
     HomePage,
     LoginPage,
     GiftPage,
@@ -50,6 +52,7 @@ export const firebaseConfig = {
     MyApp,
     AboutPage,
     ApprovalPage,
+    CandidatesPage,
     LoginPage,
     HomePage,
     GiftPage,
