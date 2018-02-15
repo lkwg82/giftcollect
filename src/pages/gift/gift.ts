@@ -1,9 +1,10 @@
-import {Component, ViewChild} from '@angular/core';
+import {Component} from '@angular/core';
 import {Camera} from '@ionic-native/camera';
-import {NavController, NavParams, TextInput} from "ionic-angular";
+import {ModalController, NavController, NavParams} from "ionic-angular";
 import {Gift} from "../../app/domain/gift";
 import {GiftStore} from "../../providers/giftstore";
 import {AuthServiceProvider} from "../../providers/auth-service/auth-service";
+import {GiftDeleteYesnoPage} from "../gift-delete-yesno/gift-delete-yesno";
 
 
 @Component({
@@ -11,7 +12,6 @@ import {AuthServiceProvider} from "../../providers/auth-service/auth-service";
              templateUrl: 'gift.html',
            })
 export class GiftPage {
-  @ViewChild('title') title: TextInput;
   public base64Image: string = "";
 
   gift: Gift = new Gift("");
@@ -21,7 +21,8 @@ export class GiftPage {
               private _nav: NavController,
               private _navParams: NavParams,
               private _giftStore: GiftStore,
-              private _auth: AuthServiceProvider) {
+              private _auth: AuthServiceProvider,
+              private modalCtrl: ModalController) {
   }
 
   ionViewDidLoad() {
@@ -30,7 +31,6 @@ export class GiftPage {
       this.changing = true;
     }
     this.gift.owner = this._auth.uid;
-    this.title.setFocus();
   }
 
   takePicture() {
@@ -52,8 +52,14 @@ export class GiftPage {
   }
 
   delete(gift: Gift) {
-    this._giftStore.delete(gift);
-    this._nav.pop();
+    let profileModal = this.modalCtrl.create(GiftDeleteYesnoPage, {"gift": gift});
+    profileModal.onDidDismiss((deleteIt: boolean) => {
+      if (deleteIt) {
+        this._giftStore.delete(gift);
+        this._nav.pop();
+      }
+    });
+    profileModal.present();
   }
 }
 

@@ -9,6 +9,9 @@ export class Gift {
   doAskBeforeBuy: boolean;
   owner: string;
 
+  deleted: boolean;
+  deletedAt: number;
+
   constructor(title: string) {
     this.id = uuid();
     this.title = title;

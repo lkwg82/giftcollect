@@ -21,6 +21,7 @@ import {UserStorage, UserStore} from "../providers/userstore";
 import {CurrentUser} from "../providers/user/CurrentUser";
 import {ApprovalPage} from "../pages/approval/approval";
 import {CandidatesPage} from "../pages/candidates/candidates";
+import {GiftDeleteYesnoPage} from "../pages/gift-delete-yesno/gift-delete-yesno";
 
 export const firebaseConfig = {
   apiKey: "AIzaSyAxO7i-Ekduq6VbeLkouU6pFnOiD28xCLg",
@@ -41,6 +42,7 @@ export const firebaseConfig = {
               HomePage,
               LoginPage,
               GiftPage,
+              GiftDeleteYesnoPage,
             ],
             imports: [
               BrowserModule,
@@ -57,6 +59,7 @@ export const firebaseConfig = {
               LoginPage,
               HomePage,
               GiftPage,
+              GiftDeleteYesnoPage,
             ],
             providers: [
               AngularFireAuth,

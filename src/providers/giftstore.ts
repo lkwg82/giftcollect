@@ -4,6 +4,7 @@ import {Gift} from "../app/domain/gift";
 import {AuthServiceProvider} from "./auth-service/auth-service";
 import {AngularFirestore} from "angularfire2/firestore";
 import {Observable} from "rxjs/Observable";
+import {Observer} from "rxjs/Observer";
 
 @Injectable()
 export class GiftStorage {
@@ -21,8 +22,12 @@ export class GiftStorage {
 
   delete(gift: Gift): Promise<void> {
     if (gift.owner == this.auth.uid) {
+
+      gift.deleted = true;
+      gift.deletedAt = Date.now();
+
       return this._docRef(gift)
-                 .delete()
+                 .set(gift, this.setOptions)
                  .then(() => {
                    console.log("deleted", gift);
                    return Promise.resolve();
@@ -37,8 +42,14 @@ export class GiftStorage {
   }
 
   valueChanges(): Observable<Gift[]> {
-    return this._myGifts()
-               .valueChanges();
+    return Observable.create((observer: Observer<Gift[]>) => {
+      this._myGifts()
+          .valueChanges()
+          .subscribe(gifts => {
+            let filtered = gifts.filter(g => g.deleted == undefined);
+            observer.next(filtered);
+          });
+    });
   }
 
   private _myGifts() {
