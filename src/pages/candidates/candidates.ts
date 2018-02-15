@@ -1,17 +1,14 @@
 import {Component} from '@angular/core';
-import {NavController, NavParams} from "ionic-angular";
 import {UserCandidate, UserStore} from "../../providers/userstore";
 
 @Component({
-  selector: 'page-candidates',
-  templateUrl: 'candidates.html',
-})
+             selector: 'page-candidates',
+             templateUrl: 'candidates.html',
+           })
 export class CandidatesPage {
   candidates: UserCandidate[];
 
-  constructor(public navCtrl: NavController,
-              public navParams: NavParams,
-              private _userStore: UserStore) {
+  constructor(private _userStore: UserStore) {
   }
 
   ionViewDidLoad() {
@@ -19,6 +16,11 @@ export class CandidatesPage {
   }
 
   accept(candidate: UserCandidate) {
-    console.log("click", event)
+    this._userStore
+        .acceptCandidate(candidate)
+        .then(() => {
+          console.log("candidate accepted");
+        })
+        .catch((reason) => console.error(reason));
   }
 }
