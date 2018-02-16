@@ -135,6 +135,12 @@ export class UserStorage {
     });
   }
 
+  updateProfile(userProfile: UserProfile): Promise<void> {
+    return this._users()
+               .doc(userProfile.userId)
+               .update(UserStorage.asObject(userProfile))
+  }
+
   usersValueChanges(): Observable<UserProfile[]> {
     return this._users().valueChanges();
   }
@@ -215,6 +221,10 @@ export class UserStore {
       new Date().toISOString());
 
     return this._storage.createUserCandidate(userCandidate);
+  }
+
+  updateProfile(userProfile: UserProfile): Promise<void> {
+    return this._storage.updateProfile(userProfile)
   }
 
   usersValueChanges(): Observable<UserProfile[]> {

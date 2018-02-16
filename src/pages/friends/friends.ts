@@ -1,6 +1,5 @@
 import {Component} from '@angular/core';
-import {AuthServiceProvider} from "../../providers/auth-service/auth-service";
-import {UserProfile, UserStore} from "../../providers/userstore";
+import {Friend, UserProfile, UserStore} from "../../providers/userstore";
 import {CurrentUser} from "../../providers/user/CurrentUser";
 
 /**
@@ -19,17 +18,32 @@ export class FriendsPage {
   count: number = 0;
 
   constructor(private _userStore: UserStore,
-              private _auth: AuthServiceProvider,
               private _currentUser: CurrentUser) {
   }
 
-  ionViewDidLoad() {
+  ionViewWillEnter() {
     console.log("loaded FriendsPage");
+    this.updateFriends();
+  }
+
+  private updateFriends() {
     this._currentUser.getProfile().then(profile => {
       this.me = profile;
       this._userStore.getFriends(profile.friends).then(userProfiles => {
         this.friends = userProfiles;
+        this.count = userProfiles.length;
       })
     });
+  }
+
+  finishFriendship(friend: Friend) {
+    this.me.friends = this.me.friends.filter(f => f == friend);
+    this._userStore
+        .updateProfile(this.me)
+        .then(() => {
+          console.log("updated profile", this.me);
+          this.updateFriends();
+        })
+        .catch(e => console.error(e));
   }
 }

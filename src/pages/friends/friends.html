@@ -19,7 +19,8 @@
       <h2>{{ f.displayName }}</h2>
       <p>email: {{ f.email }}</p>
       <p>userid: {{ f.userId }}</p>
-      <button ion-button item-end clear color="danger" icon-only large title="Freunschaft beenden">
+      <button ion-button item-end clear color="danger" icon-only large title="Freunschaft beenden"
+              (click)="finishFriendship(f)">
         <ion-icon name="remove-circle"></ion-icon>
       </button>
     </ion-item>
