@@ -24,7 +24,7 @@ export class CurrentUser {
   }
 
   init() {
-    console.log("init");
+    console.debug("init");
 
     this.state = Observable.create((observer: Observer<State>) => {
       this._auth.state.subscribe((user: firebase.User) => {
@@ -43,7 +43,7 @@ export class CurrentUser {
           }).catch(error => console.error(error));
         } else {
           observer.next(new State(false, false));
-          console.warn("user not logged in", user);
+          console.debug("user not logged in", user);
         }
       });
     });
