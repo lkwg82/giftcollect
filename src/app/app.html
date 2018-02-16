@@ -16,6 +16,10 @@
           <ion-icon name="people"></ion-icon>
           Kandidaten <span candidatesCount *ngIf="candidatesCount>0">{{candidatesCount}}</span>
         </button>
+        <button ion-item menuClose (click)="showUsers()" [ngClass]="classes">
+          <ion-icon name="people"></ion-icon>
+          Nutzer
+        </button>
       </ion-item-group>
     </ion-list>
   </ion-content>

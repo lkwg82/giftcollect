@@ -49,10 +49,6 @@ export class CurrentUser {
     });
   }
 
-  get authenticated(): boolean {
-    return !!this._user;
-  }
-
   signOut(): void {
     this._auth.signOut();
   }

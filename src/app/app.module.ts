@@ -18,10 +18,11 @@ import {AuthServiceProvider} from '../providers/auth-service/auth-service';
 import {GiftStorage, GiftStore} from "../providers/giftstore";
 import {AngularFirestore, AngularFirestoreModule} from "angularfire2/firestore";
 import {UserStorage, UserStore} from "../providers/userstore";
-import {CurrentUser} from "../providers/user/CurrentUser";
 import {ApprovalPage} from "../pages/approval/approval";
 import {CandidatesPage} from "../pages/candidates/candidates";
 import {GiftDeleteYesnoPage} from "../pages/gift-delete-yesno/gift-delete-yesno";
+import {UsersPage} from "../pages/users/users";
+import {CurrentUser} from "../providers/user/CurrentUser";
 
 export const firebaseConfig = {
   apiKey: "AIzaSyAxO7i-Ekduq6VbeLkouU6pFnOiD28xCLg",
@@ -43,6 +44,7 @@ export const firebaseConfig = {
               LoginPage,
               GiftPage,
               GiftDeleteYesnoPage,
+              UsersPage,
             ],
             imports: [
               BrowserModule,
@@ -60,6 +62,7 @@ export const firebaseConfig = {
               HomePage,
               GiftPage,
               GiftDeleteYesnoPage,
+              UsersPage,
             ],
             providers: [
               AngularFireAuth,

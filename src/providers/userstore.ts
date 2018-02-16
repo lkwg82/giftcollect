@@ -1,7 +1,7 @@
 import {Injectable} from "@angular/core";
-import {AuthServiceProvider} from "./auth-service/auth-service";
 import {AngularFirestore} from "angularfire2/firestore";
 import {Observable} from "rxjs/Observable";
+import {AuthServiceProvider} from "./auth-service/auth-service";
 
 export class UserCandidate {
   constructor(readonly userId: string,
@@ -10,24 +10,16 @@ export class UserCandidate {
               readonly lastRequestTime: number,
               readonly lastRequestTimeReadable: string) {
   }
-
-  // see https://github.com/firebase/firebase-js-sdk/issues/311
-  asObject(): object {
-    return JSON.parse(JSON.stringify(this));
-  }
 }
 
-class UserProfile {
+export class UserProfile {
+  friends: Friend[] = [];
+
   constructor(readonly userId: string,
               readonly email: string,
               readonly displayName: string,
               readonly createdAt: number,
               readonly createdAtReadable: string) {
-  }
-
-  // see https://github.com/firebase/firebase-js-sdk/issues/311
-  asObject(): object {
-    return JSON.parse(JSON.stringify(this));
   }
 
   static fromCandidate(candidate: UserCandidate) {
@@ -39,52 +31,36 @@ class UserProfile {
   }
 }
 
+export class Friend {
+  constructor(readonly userId: string,
+              readonly createdAt: number) {
+  }
+
+  static fromUserProfile(user: UserProfile) {
+    return new Friend(user.userId, Date.now());
+  }
+}
+
 @Injectable()
 export class UserStorage {
   private readonly setOptions = {merge: true};
   private readonly col_user_candidates = "/user_candidates";
   private readonly col_users = "/user_profiles";
 
-  constructor(private database: AngularFirestore) {
-  }
-
-  isApproved(uid: string): Promise<boolean> {
-    return new Promise((fullfill, error) => {
-      this.database
-          .collection(this.col_users)
-          .doc(uid).ref
-          .get()
-          .then((snapShot) => fullfill(snapShot.exists))
-          .catch((reason) => {
-            console.error(reason);
-            error(reason);
-          });
-    });
-  }
-
-  createUserCandidate(candidate: UserCandidate): Promise<void> {
-    return this.database
-               .collection(this.col_user_candidates)
-               .doc(candidate.userId).ref
-               .set(candidate.asObject(), this.setOptions)
-               .then(_ => console.log("candidate inserted"))
-               .catch((reason) => console.error(reason));
-  }
-
-  candidateValueChanges(): Observable<UserCandidate[]> {
-    return this.database.collection<UserCandidate>(this.col_user_candidates).valueChanges();
+  constructor(private _database: AngularFirestore,
+              private _auth: AuthServiceProvider) {
   }
 
   accept(candidate: UserCandidate): Promise<void> {
     console.log(candidate);
-    let candidateDocRef = this.database
+    let candidateDocRef = this._database
                               .collection(this.col_user_candidates)
                               .doc(candidate.userId).ref;
-    let userDocRef = this.database
+    let userDocRef = this._database
                          .collection(this.col_users)
                          .doc(candidate.userId).ref;
 
-    let firestore = this.database.firestore;
+    let firestore = this._database.firestore;
     let retryCounter = 0;
     return firestore.runTransaction((tx) => {
       return tx.get(candidateDocRef)
@@ -99,12 +75,74 @@ export class UserStorage {
                  } else {
                    let candidate = <UserCandidate>candidateDoc.data();
                    let userProfile = UserProfile.fromCandidate(candidate);
-                   tx.set(userDocRef, userProfile.asObject(), this.setOptions)
+                   tx.set(userDocRef, this.asObject(userProfile), this.setOptions)
                      .delete(candidateDocRef);
                  }
                })
                .catch((reason) => console.error(reason, candidateDocRef));
     });
+  }
+
+  addAsFriend(friend: Friend) {
+    return this._myProfile().ref
+               .get()
+               .then((snapshot) => {
+                 let profile = <UserProfile>snapshot.data();
+                 if (profile.friends == undefined) {
+                   profile.friends = [];
+                 }
+                 profile.friends.push(friend);
+                 this._myProfile()
+                     .set(this.asObject(profile), this.setOptions)
+                     .then(() => console.log("friend added"))
+                     .catch(reason => console.error(reason))
+               })
+               .catch(reason => console.error(reason))
+  }
+
+  candidateValueChanges(): Observable<UserCandidate[]> {
+    return this._database.collection<UserCandidate>(this.col_user_candidates).valueChanges();
+  }
+
+  createUserCandidate(candidate: UserCandidate): Promise<void> {
+    return this._database
+               .collection(this.col_user_candidates)
+               .doc(candidate.userId).ref
+               .set(this.asObject(candidate), this.setOptions)
+               .then(_ => console.log("candidate inserted"))
+               .catch((reason) => console.error(reason));
+  }
+
+  isApproved(uid: string): Promise<boolean> {
+    return new Promise((fullfill, error) => {
+      this._users()
+          .doc(uid).ref
+          .get()
+          .then((snapShot) => fullfill(snapShot.exists))
+          .catch((reason) => {
+            console.error(reason);
+            error(reason);
+          });
+    });
+  }
+
+  usersValueChanges(): Observable<UserProfile[]> {
+    return this._users().valueChanges();
+  }
+
+  private _myProfile() {
+    return this._users().doc(this._auth.uid);
+  }
+
+
+  private _users() {
+    return this._database.collection<UserProfile>(this.col_users);
+  }
+
+
+  // see https://github.com/firebase/firebase-js-sdk/issues/311
+  private asObject(value: any): object {
+    return JSON.parse(JSON.stringify(value));
   }
 }
 
@@ -136,6 +174,14 @@ export class UserStore {
 
   acceptCandidate(candidate: UserCandidate): Promise<void> {
     return this._storage.accept(candidate);
+  }
+
+  usersValueChanges(): Observable<UserProfile[]> {
+    return this._storage.usersValueChanges();
+  }
+
+  addAsFriend(friend: Friend): Promise<void> {
+    return this._storage.addAsFriend(friend);
   }
 }
 

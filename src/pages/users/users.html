@@ -1,0 +1,23 @@
+<ion-header>
+  <ion-navbar>
+    <ion-title>Nutzer ({{users.length}})</ion-title>
+  </ion-navbar>
+</ion-header>
+
+
+<ion-content padding>
+  <ion-list>
+    <ion-item *ngFor="let user of users">
+      <h2>{{ user.displayName }}</h2>
+      <p>email: {{ user.email }}</p>
+      <p>userid: {{ user.userId }}</p>
+      <button *ngIf="(me != user) && !areFriends(user)"
+              ion-button item-end clear icon-only large (click)="addAsFriend(user)" title="add as friend">
+        <ion-icon name="person-add"></ion-icon>
+      </button>
+      <!--<button ion-button item-end clear color="danger" icon-only large>-->
+      <!--<ion-icon name="trash"></ion-icon>-->
+      <!--</button>-->
+    </ion-item>
+  </ion-list>
+</ion-content>

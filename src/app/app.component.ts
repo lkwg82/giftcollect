@@ -3,11 +3,11 @@ import {NavController, Platform} from 'ionic-angular';
 import {StatusBar} from '@ionic-native/status-bar';
 import {SplashScreen} from '@ionic-native/splash-screen';
 import {LoginPage} from "../pages/login/login";
-import {HomePage} from "../pages/home/home";
 import {CurrentUser, State} from "../providers/user/CurrentUser";
 import {ApprovalPage} from "../pages/approval/approval";
-import {UserStore} from "../providers/userstore";
+import {UserCandidate, UserStore} from "../providers/userstore";
 import {CandidatesPage} from "../pages/candidates/candidates";
+import {UsersPage} from "../pages/users/users";
 import {AuthServiceProvider} from "../providers/auth-service/auth-service";
 
 @Component({
@@ -46,16 +46,11 @@ export class MyApp {
         this._userStore
             .candidateValueChanges()
             .takeUntil(this._auth.signedOut)
-            .subscribe((candidates) => {
-              this.candidatesCount = candidates.length;
-              if (this.candidatesCount == 0) {
-                this.classes = "zero";
-              } else {
-                this.classes = "";
-              }
-            });
+            .subscribe(candidates => this.decorateMenuEntryCandidates(candidates));
+
         if (state.approved) {
-          this.nav.setRoot(HomePage);
+          // TODO
+          this.nav.setRoot(UsersPage);
         } else {
           this.nav.setRoot(ApprovalPage);
         }
@@ -65,8 +60,21 @@ export class MyApp {
     });
   }
 
+  private decorateMenuEntryCandidates(candidates: UserCandidate[]) {
+    this.candidatesCount = candidates.length;
+    if (this.candidatesCount == 0) {
+      this.classes = "zero";
+    } else {
+      this.classes = "";
+    }
+  }
+
   showCandidates(): void {
     this.nav.push(CandidatesPage)
+  }
+
+  showUsers(): void {
+    this.nav.push(UsersPage)
   }
 
   signOut(): void {

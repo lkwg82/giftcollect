@@ -9,22 +9,15 @@ import {Observer} from "rxjs/Observer";
 
 @Injectable()
 export class AuthServiceProvider {
-  currentUser: firebase.User;
+  private _user: firebase.User;
   state: Observable<firebase.User | null>;
 
-  constructor(public afAuth: AngularFireAuth) {
+  constructor(private afAuth: AngularFireAuth) {
     this.state = afAuth.authState;
     this.state.subscribe((user: firebase.User) => {
-      this.currentUser = user;
+      console.log("user", user);
+      this._user = user;
     });
-  }
-
-  get uid(): string {
-    return this.currentUser.uid
-  }
-
-  get email(): string {
-    return this.currentUser.email || "not set";
   }
 
   signInWithGoogle(): Promise<void> {
@@ -42,12 +35,16 @@ export class AuthServiceProvider {
     });
   }
 
-  signOut(): void {
-    this.afAuth.auth.signOut();
+  get uid(): string {
+    return this._user.uid
+  }
+
+  get email(): string {
+    return this._user.email || "not set";
   }
 
   get displayName(): string {
-    return this.currentUser.displayName || "not set";
+    return this._user.displayName || "not set";
   }
 
   get signedOut(): Observable<void> {
@@ -59,6 +56,9 @@ export class AuthServiceProvider {
             }
           });
     });
+  }
 
+  signOut(): Promise<void> {
+    return this.afAuth.auth.signOut();
   }
 }
