@@ -153,6 +153,14 @@ export class UserStorage {
     return JSON.parse(JSON.stringify(value));
   }
 
+  deny(candidate: UserCandidate): Promise<void> {
+    return this._database
+               .collection(this.col_user_candidates)
+               .doc(candidate.userId)
+               .delete()
+               .then(_ => console.log("candidate removed"))
+               .catch((reason) => console.error(reason));
+  }
 }
 
 @Injectable()
@@ -160,6 +168,38 @@ export class UserStore {
 
   constructor(private _auth: AuthServiceProvider,
               private _storage: UserStorage) {
+  }
+
+
+  acceptCandidate(candidate: UserCandidate): Promise<void> {
+    return this._storage.accept(candidate);
+  }
+
+  addAsFriend(friend: Friend): Promise<void> {
+    return this._storage.addAsFriend(friend);
+  }
+
+  candidateValueChanges(): Observable<UserCandidate[]> {
+    return this._storage.candidateValueChanges();
+  }
+
+  denyCandidate(candidate: UserCandidate): Promise<void> {
+    return this._storage.deny(candidate);
+  }
+
+  getFriends(friends: Friend[]): Promise<UserProfile[]> {
+    if (friends) {
+      let promises: Promise<UserProfile>[] = [];
+      let userIds = friends.map(f => f.userId);
+      userIds.forEach(uid => promises.push(this.getProfileById(uid)));
+      return Promise.all(promises)
+                    .then(profiles => Promise.resolve(profiles));
+    }
+    return Promise.resolve([]);
+  }
+
+  getProfileById(uid: string): Promise<UserProfile> {
+    return this._storage.getProfileById(uid);
   }
 
   isApproved(): Promise<boolean> {
@@ -177,35 +217,9 @@ export class UserStore {
     return this._storage.createUserCandidate(userCandidate);
   }
 
-  candidateValueChanges(): Observable<UserCandidate[]> {
-    return this._storage.candidateValueChanges();
-  }
-
-  acceptCandidate(candidate: UserCandidate): Promise<void> {
-    return this._storage.accept(candidate);
-  }
-
   usersValueChanges(): Observable<UserProfile[]> {
     return this._storage.usersValueChanges();
   }
 
-  addAsFriend(friend: Friend): Promise<void> {
-    return this._storage.addAsFriend(friend);
-  }
-
-  getFriends(friends: Friend[]): Promise<UserProfile[]> {
-    if (friends) {
-      let promises: Promise<UserProfile>[] = [];
-      let userIds = friends.map(f => f.userId);
-      userIds.forEach(uid => promises.push(this.getProfileById(uid)));
-      return Promise.all(promises)
-                    .then(profiles => Promise.resolve(profiles));
-    }
-    return Promise.resolve([]);
-  }
-
-  getProfileById(uid: string): Promise<UserProfile> {
-    return this._storage.getProfileById(uid);
-  }
 }
 

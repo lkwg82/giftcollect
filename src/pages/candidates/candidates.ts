@@ -29,4 +29,13 @@ export class CandidatesPage {
         })
         .catch((reason) => console.error(reason));
   }
+
+  deny(candidate: UserCandidate) {
+    this._userStore
+        .denyCandidate(candidate)
+        .then(() => {
+          console.log("candidate denied");
+        })
+        .catch((reason) => console.error(reason));
+  }
 }

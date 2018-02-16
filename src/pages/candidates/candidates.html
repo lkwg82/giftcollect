@@ -22,8 +22,8 @@
       <button ion-button item-end clear icon-only large (click)="accept(candidate)">
         <ion-icon name="checkmark-circle"></ion-icon>
       </button>
-      <button ion-button item-end clear color="danger" icon-only large>
-        <ion-icon name="close-circle"></ion-icon>
+      <button ion-button item-end clear color="danger" icon-only large (click)="deny(candidate)">
+        <ion-icon name="remove-circle"></ion-icon>
       </button>
     </ion-item>
   </ion-list>
