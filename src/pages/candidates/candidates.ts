@@ -1,5 +1,6 @@
 import {Component} from '@angular/core';
 import {UserCandidate, UserStore} from "../../providers/userstore";
+import {AuthServiceProvider} from "../../providers/auth-service/auth-service";
 
 @Component({
              selector: 'page-candidates',
@@ -8,11 +9,16 @@ import {UserCandidate, UserStore} from "../../providers/userstore";
 export class CandidatesPage {
   candidates: UserCandidate[];
 
-  constructor(private _userStore: UserStore) {
+  constructor(private _userStore: UserStore,
+              private _auth: AuthServiceProvider) {
   }
 
   ionViewDidLoad() {
-    this._userStore.candidateValueChanges().subscribe((candidates) => this.candidates = candidates);
+    console.log("loaded CandidatePAges");
+    this._userStore
+        .candidateValueChanges()
+        .takeUntil(this._auth.signedOut)
+        .subscribe((candidates) => this.candidates = candidates);
   }
 
   accept(candidate: UserCandidate) {

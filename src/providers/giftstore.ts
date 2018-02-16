@@ -45,6 +45,7 @@ export class GiftStorage {
     return Observable.create((observer: Observer<Gift[]>) => {
       this._myGifts()
           .valueChanges()
+          .takeUntil(this.auth.signedOut)
           .subscribe(gifts => {
             let filtered = gifts.filter(g => g.deleted == undefined);
             observer.next(filtered);
