@@ -50,9 +50,14 @@ export class AuthServiceProvider {
     return this.currentUser.displayName || "not set";
   }
 
-  get signedOut(): Observable<boolean> {
-    return Observable.create((observer: Observer<boolean>) => {
-      this.state.subscribe((user: firebase.User) => observer.next(user != null));
+  get signedOut(): Observable<void> {
+    return Observable.create((observer: Observer<void>) => {
+      this.state
+          .subscribe((user: firebase.User) => {
+            if (user == null) {
+              observer.complete();
+            }
+          });
     });
 
   }
