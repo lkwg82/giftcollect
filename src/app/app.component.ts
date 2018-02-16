@@ -9,6 +9,8 @@ import {UserCandidate, UserStore} from "../providers/userstore";
 import {CandidatesPage} from "../pages/candidates/candidates";
 import {UsersPage} from "../pages/users/users";
 import {AuthServiceProvider} from "../providers/auth-service/auth-service";
+import {FriendsPage} from "../pages/friends/friends";
+import {HomePage} from "../pages/home/home";
 
 @Component({
              templateUrl: 'app.html'
@@ -49,8 +51,7 @@ export class MyApp {
             .subscribe(candidates => this.decorateMenuEntryCandidates(candidates));
 
         if (state.approved) {
-          // TODO
-          this.nav.setRoot(UsersPage);
+          this.nav.setRoot(HomePage);
         } else {
           this.nav.setRoot(ApprovalPage);
         }
@@ -71,6 +72,10 @@ export class MyApp {
 
   showCandidates(): void {
     this.nav.push(CandidatesPage)
+  }
+
+  showFriends(): void {
+    this.nav.push(FriendsPage)
   }
 
   showUsers(): void {

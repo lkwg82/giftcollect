@@ -1,6 +1,6 @@
 import {Injectable} from "@angular/core";
 import {AuthServiceProvider} from "../auth-service/auth-service";
-import {UserStore} from "../userstore";
+import {UserProfile, UserStore} from "../userstore";
 import * as firebase from "firebase/app";
 import {Observable} from "rxjs/Observable";
 import {Observer} from "rxjs/Observer";
@@ -51,5 +51,9 @@ export class CurrentUser {
 
   signOut(): void {
     this._auth.signOut();
+  }
+
+  getProfile(): Promise<UserProfile> {
+    return this._store.getProfileById(this._auth.uid);
   }
 }

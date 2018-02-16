@@ -75,7 +75,7 @@ export class UserStorage {
                  } else {
                    let candidate = <UserCandidate>candidateDoc.data();
                    let userProfile = UserProfile.fromCandidate(candidate);
-                   tx.set(userDocRef, this.asObject(userProfile), this.setOptions)
+                   tx.set(userDocRef, UserStorage.asObject(userProfile), this.setOptions)
                      .delete(candidateDocRef);
                  }
                })
@@ -93,7 +93,7 @@ export class UserStorage {
                  }
                  profile.friends.push(friend);
                  this._myProfile()
-                     .set(this.asObject(profile), this.setOptions)
+                     .set(UserStorage.asObject(profile), this.setOptions)
                      .then(() => console.log("friend added"))
                      .catch(reason => console.error(reason))
                })
@@ -108,9 +108,18 @@ export class UserStorage {
     return this._database
                .collection(this.col_user_candidates)
                .doc(candidate.userId).ref
-               .set(this.asObject(candidate), this.setOptions)
+               .set(UserStorage.asObject(candidate), this.setOptions)
                .then(_ => console.log("candidate inserted"))
                .catch((reason) => console.error(reason));
+  }
+
+  getProfileById(uid: string): Promise<UserProfile> {
+    return this._users()
+               .doc(uid)
+               .ref
+               .get()
+               .then((snapshot) => Promise.resolve(<UserProfile>snapshot.data()))
+               .catch(reason => Promise.reject(reason));
   }
 
   isApproved(uid: string): Promise<boolean> {
@@ -139,11 +148,11 @@ export class UserStorage {
     return this._database.collection<UserProfile>(this.col_users);
   }
 
-
   // see https://github.com/firebase/firebase-js-sdk/issues/311
-  private asObject(value: any): object {
+  private static asObject(value: any): object {
     return JSON.parse(JSON.stringify(value));
   }
+
 }
 
 @Injectable()
@@ -182,6 +191,21 @@ export class UserStore {
 
   addAsFriend(friend: Friend): Promise<void> {
     return this._storage.addAsFriend(friend);
+  }
+
+  getFriends(friends: Friend[]): Promise<UserProfile[]> {
+    if (friends) {
+      let promises: Promise<UserProfile>[] = [];
+      let userIds = friends.map(f => f.userId);
+      userIds.forEach(uid => promises.push(this.getProfileById(uid)));
+      return Promise.all(promises)
+                    .then(profiles => Promise.resolve(profiles));
+    }
+    return Promise.resolve([]);
+  }
+
+  getProfileById(uid: string): Promise<UserProfile> {
+    return this._storage.getProfileById(uid);
   }
 }
 

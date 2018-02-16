@@ -6,6 +6,10 @@
   </ion-header>
   <ion-content>
     <ion-list>
+      <button ion-item menuClose (click)="showFriends()" [ngClass]="classes">
+        <ion-icon name="people"></ion-icon>
+        Freunde
+      </button>
       <button ion-item menuClose (click)="signOut()">
         <ion-icon name="log-out"></ion-icon>
         logout ({{_currentUser.name}})

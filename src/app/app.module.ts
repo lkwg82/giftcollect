@@ -23,6 +23,7 @@ import {CandidatesPage} from "../pages/candidates/candidates";
 import {GiftDeleteYesnoPage} from "../pages/gift-delete-yesno/gift-delete-yesno";
 import {UsersPage} from "../pages/users/users";
 import {CurrentUser} from "../providers/user/CurrentUser";
+import {FriendsPage} from "../pages/friends/friends";
 
 export const firebaseConfig = {
   apiKey: "AIzaSyAxO7i-Ekduq6VbeLkouU6pFnOiD28xCLg",
@@ -40,10 +41,11 @@ export const firebaseConfig = {
               AboutPage,
               ApprovalPage,
               CandidatesPage,
-              HomePage,
-              LoginPage,
+              FriendsPage,
               GiftPage,
               GiftDeleteYesnoPage,
+              HomePage,
+              LoginPage,
               UsersPage,
             ],
             imports: [
@@ -58,10 +60,11 @@ export const firebaseConfig = {
               AboutPage,
               ApprovalPage,
               CandidatesPage,
-              LoginPage,
-              HomePage,
+              FriendsPage,
               GiftPage,
               GiftDeleteYesnoPage,
+              HomePage,
+              LoginPage,
               UsersPage,
             ],
             providers: [
@@ -70,6 +73,7 @@ export const firebaseConfig = {
               AuthServiceProvider,
               Camera,
               CurrentUser,
+              FriendsPage,
               GiftStore,
               GiftStorage,
               SplashScreen,
