@@ -5,14 +5,14 @@ service cloud.firestore {
       return request.auth.uid != null && exists(/databases/$(database)/documents/user_profiles/$(request.auth.uid));
    }
    match /gifts/{userId}/gifts/{gift=**} {
-      allow read : if request.auth.uid == userId && isMember();
-      allow write: if request.auth.uid == userId && isMember();
+      allow read : if isMember();
+      allow write: if isMember();
    }
    match /user_candidates/{userId} {
         // candidates can check for existence (first insert)
         allow list          : if request.auth.uid != null;
         // members can accept candidates
-        allow get,delete    : if request.auth.uid != null && exists(/databases/$(database)/documents/user_profiles/$(request.auth.uid));
+        allow get,delete    : if isMember();
         // candidates can only change their profile
         allow create,update : if request.auth.uid != null
                            && request.auth.uid == userId
@@ -30,13 +30,13 @@ service cloud.firestore {
                     ;
       }
    match /user_profiles/{userId} {
-      // members can
-      //  - insert candidates
-      //  - check if members exist
-      allow create,list: if request.auth.uid != null && exists(/databases/$(database)/documents/user_profiles/$(request.auth.uid));
-      // members only change their profiles
-   	 	allow read,write : if request.auth.uid != null
-                         && request.auth.uid == userId
+        // members can
+        //  - insert candidates
+        //  - check if members exist
+        allow create,read: if request.auth.uid == userId || isMember();
+        // members only change their profiles
+        allow write : if request.auth.uid != null
+                           && request.auth.uid == userId
    }
   }
 }
