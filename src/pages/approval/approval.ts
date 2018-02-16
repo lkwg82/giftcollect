@@ -8,14 +8,10 @@ import {Component} from '@angular/core';
  * Ionic pages and navigation.
  */
 @Component({
-  selector: 'page-approval',
-  templateUrl: 'approval.html',
-})
+             selector: 'page-approval',
+             templateUrl: 'approval.html',
+           })
 export class ApprovalPage {
-
-  // constructor(public navCtrl: NavController,
-  //             public navParams: NavParams) {
-  // }
 
   ionViewDidLoad() {
     console.log('ionViewDidLoad ApprovalPage');
