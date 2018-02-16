@@ -83,23 +83,6 @@ export class UserStorage {
     });
   }
 
-  addAsFriend(friend: Friend) {
-    return this._myProfile().ref
-               .get()
-               .then((snapshot) => {
-                 let profile = <UserProfile>snapshot.data();
-                 if (profile.friends == undefined) {
-                   profile.friends = [];
-                 }
-                 profile.friends.push(friend);
-                 this._myProfile()
-                     .set(UserStorage.asObject(profile), this.setOptions)
-                     .then(() => console.log("friend added"))
-                     .catch(reason => console.error(reason))
-               })
-               .catch(reason => console.error(reason))
-  }
-
   candidateValueChanges(): Observable<UserCandidate[]> {
     return this._database.collection<UserCandidate>(this.col_user_candidates).valueChanges();
   }
@@ -179,10 +162,6 @@ export class UserStore {
 
   acceptCandidate(candidate: UserCandidate): Promise<void> {
     return this._storage.accept(candidate);
-  }
-
-  addAsFriend(friend: Friend): Promise<void> {
-    return this._storage.addAsFriend(friend);
   }
 
   candidateValueChanges(): Observable<UserCandidate[]> {

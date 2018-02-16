@@ -34,12 +34,16 @@ export class UsersPage {
   }
 
   addAsFriend(user: UserProfile) {
+    if (!this.me.friends) {
+      this.me.friends = [];
+    }
+    this.me.friends.push(Friend.fromUserProfile(user));
     this._userStore
-        .addAsFriend(Friend.fromUserProfile(user))
+        .updateProfile(this.me)
         .then(() => {
           console.log("as friend added");
         })
-        .catch((reason) => console.error(reason));
+        .catch(e => console.error(e));
   }
 
   areFriends(user: UserProfile): boolean {
