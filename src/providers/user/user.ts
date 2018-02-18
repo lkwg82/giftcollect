@@ -4,13 +4,13 @@ import {AuthServiceProvider} from "../auth-service/auth-service";
 import {Subject} from "rxjs/Subject";
 
 @Injectable()
-export class FriendsProvider {
+export class UserProvider {
   me: Subject<UserProfile> = new Subject<UserProfile>();
   friends: Subject<UserProfile[]> = new Subject<UserProfile[]>();
 
   constructor(private _userStore: UserStore,
               private _auth: AuthServiceProvider) {
-    console.log('Hello FriendsProvider Provider');
+    console.log('Hello UserProvider Provider');
 
     this._userStore
         .changes.myProfile()

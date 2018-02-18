@@ -1,6 +1,6 @@
 import {Component} from '@angular/core';
 import {Friend, UserProfile, UserStore} from "../../providers/userstore";
-import {FriendsProvider} from "../../providers/friends/friends";
+import {UserProvider} from "../../providers/user/user";
 import {Subject} from "rxjs/Subject";
 
 @Component({
@@ -14,7 +14,7 @@ export class FriendsPage {
   destroy$: Subject<boolean> = new Subject<boolean>();
 
   constructor(private _userStore: UserStore,
-              private _friendsProvider: FriendsProvider) {
+              private _friendsProvider: UserProvider) {
     _friendsProvider.friends
                     .takeUntil(this.destroy$)
                     .subscribe(friends => this.friends = friends)
