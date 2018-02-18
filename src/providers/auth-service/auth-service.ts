@@ -39,7 +39,7 @@ export class AuthServiceProvider {
     // let authServiceProvider = this;
     let auth = this.afAuth.auth;
 
-    return auth.signInWithRedirect(authProvider).then((result) => {
+    return auth.signInWithPopup(authProvider).then((result) => {
       // this.additionalUserInfo = result.additionalUserInfo
     }).catch(function (error) {
       console.error(error);

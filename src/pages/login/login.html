@@ -7,7 +7,10 @@
     </ion-row>
     <ion-row>
       <ion-col text-center>
-        <button icon-start ion-button color="danger" large (click)="signInWithGoogle()">
+        <button *ngIf="loading" icon-start ion-button color="danger" large>
+          <span>loading ... </span>
+        </button>
+        <button *ngIf="!loading" icon-start ion-button color="danger" large (click)="signInWithGoogle()">
           <ion-icon name="logo-googleplus"></ion-icon>
           <span>Sign in with Google</span>
         </button>
