@@ -36,7 +36,6 @@ export class AuthServiceProvider {
     // https://developers.google.com/identity/protocols/OpenIDConnect#authenticationuriparameters
     authProvider.setCustomParameters({'prompt': 'select_account',});
 
-    // let authServiceProvider = this;
     let auth = this.afAuth.auth;
 
     return auth.signInWithPopup(authProvider).then((result) => {
