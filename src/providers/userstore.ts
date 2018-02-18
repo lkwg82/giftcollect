@@ -118,6 +118,10 @@ export class UserStorage {
     });
   }
 
+  myProfileChanges() {
+    return this._myProfile().valueChanges()
+  }
+
   updateProfile(userProfile: UserProfile): Promise<void> {
     return this._users()
                .doc(userProfile.userId)
@@ -159,13 +163,8 @@ export class UserStore {
               private _storage: UserStorage) {
   }
 
-
   acceptCandidate(candidate: UserCandidate): Promise<void> {
     return this._storage.accept(candidate);
-  }
-
-  candidateValueChanges(): Observable<UserCandidate[]> {
-    return this._storage.candidateValueChanges();
   }
 
   denyCandidate(candidate: UserCandidate): Promise<void> {
@@ -206,9 +205,24 @@ export class UserStore {
     return this._storage.updateProfile(userProfile)
   }
 
-  usersValueChanges(): Observable<UserProfile[]> {
-    return this._storage.usersValueChanges();
+  get changes(): Changes {
+    return new Changes(this._storage);
   }
-
 }
 
+class Changes {
+  constructor(private readonly _storage: UserStorage) {
+  }
+
+  candidates(): Observable<UserCandidate[]> {
+    return this._storage.candidateValueChanges();
+  }
+
+  myProfile() {
+    return this._storage.myProfileChanges();
+  }
+
+  users(): Observable<UserProfile[]> {
+    return this._storage.usersValueChanges();
+  }
+}

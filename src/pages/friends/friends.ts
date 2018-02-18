@@ -1,13 +1,8 @@
 import {Component} from '@angular/core';
 import {Friend, UserProfile, UserStore} from "../../providers/userstore";
-import {CurrentUser} from "../../providers/user/CurrentUser";
+import {FriendsProvider} from "../../providers/friends/friends";
+import {Subject} from "rxjs/Subject";
 
-/**
- * Generated class for the FriendsPage page.
- *
- * See https://ionicframework.com/docs/components/#navigation for more info on
- * Ionic pages and navigation.
- */
 @Component({
              selector: 'page-friends',
              templateUrl: 'friends.html',
@@ -15,25 +10,25 @@ import {CurrentUser} from "../../providers/user/CurrentUser";
 export class FriendsPage {
   friends: UserProfile[] = [];
   me: UserProfile;
-  count: number = 0;
+
+  destroy$: Subject<boolean> = new Subject<boolean>();
 
   constructor(private _userStore: UserStore,
-              private _currentUser: CurrentUser) {
+              private _friendsProvider: FriendsProvider) {
+    _friendsProvider.friends
+                    .takeUntil(this.destroy$)
+                    .subscribe(friends => this.friends = friends)
+    _friendsProvider.me
+                    .takeUntil(this.destroy$)
+                    .subscribe(profile => this.me = profile);
   }
 
   ionViewWillEnter() {
     console.log("loaded FriendsPage");
-    this.updateFriends();
   }
 
-  private updateFriends() {
-    this._currentUser.getProfile().then(profile => {
-      this.me = profile;
-      this._userStore.getFriends(profile.friends).then(userProfiles => {
-        this.friends = userProfiles;
-        this.count = userProfiles.length;
-      })
-    });
+  ionViewWillLeave() {
+    this.destroy$.next(true);
   }
 
   finishFriendship(friend: Friend) {
@@ -42,7 +37,6 @@ export class FriendsPage {
         .updateProfile(this.me)
         .then(() => {
           console.log("updated profile", this.me);
-          this.updateFriends();
         })
         .catch(e => console.error(e));
   }

@@ -15,8 +15,7 @@ export class CandidatesPage {
 
   ionViewDidLoad() {
     console.log("loaded CandidatePAges");
-    this._userStore
-        .candidateValueChanges()
+    this._userStore.changes.candidates()
         .takeUntil(this._auth.signedOut)
         .subscribe((candidates) => this.candidates = candidates);
   }

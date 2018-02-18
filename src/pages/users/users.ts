@@ -19,8 +19,7 @@ export class UsersPage {
 
   ionViewDidLoad() {
     console.log("loaded UsersPage");
-    this.usersSubscription = this._userStore
-                                 .usersValueChanges()
+    this.usersSubscription = this._userStore.changes.users()
                                  .takeUntil(this._auth.signedOut)
                                  .subscribe((userProfiles) => {
                                    console.log(userProfiles)

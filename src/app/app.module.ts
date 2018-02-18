@@ -24,6 +24,7 @@ import {GiftDeleteYesnoPage} from "../pages/gift-delete-yesno/gift-delete-yesno"
 import {UsersPage} from "../pages/users/users";
 import {CurrentUser} from "../providers/user/CurrentUser";
 import {FriendsPage} from "../pages/friends/friends";
+import {FriendsProvider} from '../providers/friends/friends';
 
 export const firebaseConfig = {
   apiKey: "AIzaSyAxO7i-Ekduq6VbeLkouU6pFnOiD28xCLg",
@@ -73,7 +74,7 @@ export const firebaseConfig = {
               AuthServiceProvider,
               Camera,
               CurrentUser,
-              FriendsPage,
+              FriendsProvider,
               GiftStore,
               GiftStorage,
               SplashScreen,

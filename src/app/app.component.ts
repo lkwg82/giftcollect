@@ -45,8 +45,7 @@ export class MyApp {
       if (state.authenticated) {
         this.approved = state.approved;
 
-        this._userStore
-            .candidateValueChanges()
+        this._userStore.changes.candidates()
             .takeUntil(this._auth.signedOut)
             .subscribe(candidates => this.decorateMenuEntryCandidates(candidates));
 
