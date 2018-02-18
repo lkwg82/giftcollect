@@ -11,6 +11,7 @@ import {Observer} from "rxjs/Observer";
 export class AuthServiceProvider {
   private _user: firebase.User;
   state: Observable<firebase.User | null>;
+  private signOutObserver: (observer: Observer<boolean>) => void;
 
   constructor(private afAuth: AngularFireAuth) {
     this.state = afAuth.authState;
@@ -18,6 +19,16 @@ export class AuthServiceProvider {
       console.log("user", user);
       this._user = user;
     });
+
+    this.signOutObserver = (observer: Observer<boolean>) => {
+      this.state
+          .subscribe((user: firebase.User) => {
+            if (user == null) {
+              console.log("signal signout:");
+              observer.next(true);
+            }
+          });
+    };
   }
 
   signInWithGoogle(): Promise<void> {
@@ -48,14 +59,7 @@ export class AuthServiceProvider {
   }
 
   get signedOut(): Observable<void> {
-    return Observable.create((observer: Observer<void>) => {
-      this.state
-          .subscribe((user: firebase.User) => {
-            if (user == null) {
-              observer.complete();
-            }
-          });
-    });
+    return Observable.create(this.signOutObserver);
   }
 
   signOut(): Promise<void> {

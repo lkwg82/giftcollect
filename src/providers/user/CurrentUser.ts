@@ -30,23 +30,27 @@ export class CurrentUser {
       this._auth.state.subscribe((user: firebase.User) => {
         this._user = user;
         if (user) {
-          console.debug("current user ", user);
-          if (user.displayName) {
-            this.name = user.displayName;
-          }
-          this._store.isApproved().then(approved => {
-            this.userApproved = approved;
-            observer.next(new State(true, approved));
-            if (!approved) {
-              this._store.requestApproval();
-            }
-          }).catch(error => console.error(error));
+          this.handleUser(user, observer);
         } else {
           observer.next(new State(false, false));
           console.debug("user not logged in", user);
         }
       });
     });
+  }
+
+  private handleUser(user: firebase.User, observer: Observer<State>) {
+    console.debug("current user ", user);
+    if (user.displayName) {
+      this.name = user.displayName;
+    }
+    this._store.isApproved().then(approved => {
+      this.userApproved = approved;
+      observer.next(new State(true, approved));
+      if (!approved) {
+        this._store.requestApproval();
+      }
+    }).catch(error => console.error(error));
   }
 
   signOut(): void {
