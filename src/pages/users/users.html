@@ -15,14 +15,14 @@
         <p>userid: {{ me.userId }}</p>
       </ion-item>
     </ion-item-group>
-    <ion-item-group>
+    <ion-item-group *ngIf="users.length > 0">
       <ion-item-divider color="light">other users ({{users.length}})</ion-item-divider>
       <ion-item *ngFor="let user of users">
         <h2>{{ user.displayName }}</h2>
         <p>email: {{ user.email }}</p>
         <p>userid: {{ user.userId }}</p>
         <button *ngIf="!areFriends(user)"
-                ion-button item-end clear icon-only large (click)="addAsFriend(user)" title="add as friend">
+                ion-button item-end clear icon-only large (click)="addAsFriend(event)" title="add as friend">
           <ion-icon name="person-add"></ion-icon>
         </button>
       </ion-item>
