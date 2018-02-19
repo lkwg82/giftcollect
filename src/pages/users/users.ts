@@ -2,6 +2,7 @@ import {Component} from '@angular/core';
 import {Friend, UserProfile, UserStore} from "../../providers/userstore";
 import {AuthServiceProvider} from "../../providers/auth-service/auth-service";
 import {Subscription} from "rxjs/Subscription";
+import {UserProvider} from "../../providers/user/user";
 
 @Component({
              selector: 'page-users',
@@ -9,23 +10,19 @@ import {Subscription} from "rxjs/Subscription";
            })
 export class UsersPage {
   users: UserProfile[] = [];
-  me: UserProfile;
+  me: UserProfile = new UserProfile("x", "", "", 1, "");
 
   private usersSubscription: Subscription;
 
   constructor(private _userStore: UserStore,
-              private _auth: AuthServiceProvider) {
+              private _auth: AuthServiceProvider,
+              private _userProvider: UserProvider) {
   }
 
   ionViewDidLoad() {
     console.log("loaded UsersPage");
-    this.usersSubscription = this._userStore.changes.users()
-                                 .takeUntil(this._auth.signedOut)
-                                 .subscribe((userProfiles) => {
-                                   console.log(userProfiles)
-                                   this.me = userProfiles.filter(p => p.userId == this._auth.uid)[0];
-                                   this.users = userProfiles;
-                                 });
+    this._userProvider.me.subscribe(me => this.me = me);
+    this._userProvider.friends.subscribe(friends => this.users = friends);
   }
 
   ionViewWillLeave() {
@@ -46,6 +43,7 @@ export class UsersPage {
   }
 
   areFriends(user: UserProfile): boolean {
+    console.dir(user);
     let friends = this.me.friends;
     if (friends) {
       return friends.map(f => f.userId == user.userId).length == 1
