@@ -2,7 +2,7 @@ import {Component} from '@angular/core';
 import {Friend, UserProfile, UserStore} from "../../providers/userstore";
 import {AuthServiceProvider} from "../../providers/auth-service/auth-service";
 import {Subscription} from "rxjs/Subscription";
-import {UserProvider} from "../../providers/user/user";
+import {UserService} from "../../providers/user/userService";
 
 @Component({
              selector: 'page-users',
@@ -16,13 +16,13 @@ export class UsersPage {
 
   constructor(private _userStore: UserStore,
               private _auth: AuthServiceProvider,
-              private _userProvider: UserProvider) {
+              private _userService: UserService) {
   }
 
   ionViewDidLoad() {
     console.log("loaded UsersPage");
-    this._userProvider.me.subscribe(me => this.me = me);
-    this._userProvider.friends.subscribe(friends => this.users = friends);
+    this._userService.me.subscribe(me => this.me = me);
+    this._userService.friends.subscribe(friends => this.users = friends);
   }
 
   ionViewWillLeave() {

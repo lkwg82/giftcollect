@@ -24,7 +24,7 @@ import {GiftDeleteYesnoPage} from "../pages/gift-delete-yesno/gift-delete-yesno"
 import {UsersPage} from "../pages/users/users";
 import {CurrentUser} from "../providers/user/CurrentUser";
 import {FriendsPage} from "../pages/friends/friends";
-import {UserProvider} from '../providers/user/user';
+import {UserService} from '../providers/user/userService';
 
 export const firebaseConfig = {
   apiKey: "AIzaSyAxO7i-Ekduq6VbeLkouU6pFnOiD28xCLg",
@@ -78,7 +78,7 @@ export const firebaseConfig = {
               GiftStorage,
               SplashScreen,
               StatusBar,
-              UserProvider,
+              UserService,
               UserStore,
               UserStorage,
               {provide: ErrorHandler, useClass: IonicErrorHandler}

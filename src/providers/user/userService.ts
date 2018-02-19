@@ -4,7 +4,7 @@ import {AuthServiceProvider} from "../auth-service/auth-service";
 import {Subject} from "rxjs/Subject";
 
 @Injectable()
-export class UserProvider {
+export class UserService {
   me: Subject<UserProfile> = new Subject<UserProfile>();
   friends: Subject<UserProfile[]> = new Subject<UserProfile[]>();
 
@@ -22,7 +22,7 @@ export class UserProvider {
         .subscribe((myUserProfile: UserProfile) => {
           this._userStore
               .getFriends(myUserProfile.friends)
-              .then(friends => this.friends.next(friends))
+              .then(friends => this.friends.next(friends.filter(f => f != undefined)))
         });
   }
 }

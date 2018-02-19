@@ -1,6 +1,6 @@
 import {Component} from '@angular/core';
 import {Friend, UserProfile, UserStore} from "../../providers/userstore";
-import {UserProvider} from "../../providers/user/user";
+import {UserService} from "../../providers/user/userService";
 import {Subject} from "rxjs/Subject";
 
 @Component({
@@ -14,17 +14,17 @@ export class FriendsPage {
   destroy$: Subject<boolean> = new Subject<boolean>();
 
   constructor(private _userStore: UserStore,
-              private _friendsProvider: UserProvider) {
-    _friendsProvider.friends
-                    .takeUntil(this.destroy$)
-                    .subscribe(friends => this.friends = friends)
-    _friendsProvider.me
-                    .takeUntil(this.destroy$)
-                    .subscribe(profile => this.me = profile);
+              private _userService: UserService) {
   }
 
   ionViewWillEnter() {
     console.log("loaded FriendsPage");
+    this._userService.friends
+        .takeUntil(this.destroy$)
+        .subscribe(friends => this.friends = friends)
+    this._userService.me
+        .takeUntil(this.destroy$)
+        .subscribe(profile => this.me = profile);
   }
 
   ionViewWillLeave() {
