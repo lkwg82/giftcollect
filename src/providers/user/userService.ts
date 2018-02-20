@@ -5,24 +5,47 @@ import {Subject} from "rxjs/Subject";
 
 @Injectable()
 export class UserService {
-  me: Subject<UserProfile> = new Subject<UserProfile>();
-  friends: Subject<UserProfile[]> = new Subject<UserProfile[]>();
+  meO: Subject<UserProfile> = new Subject<UserProfile>();
+  me: UserProfile = new UserProfile("x", "", "", 1, "");
+
+  friendsO: Subject<UserProfile[]> = new Subject<UserProfile[]>();
+  friends: UserProfile[] = [];
+
+  otherUsersO: Subject<UserProfile[]> = new Subject<UserProfile[]>();
+  otherUsers: UserProfile[] = [];
 
   constructor(private _userStore: UserStore,
               private _auth: AuthServiceProvider) {
     console.log('Hello UserProvider Provider');
 
     this._userStore
-        .changes.myProfile()
+        .changes
+        .users()
         .takeUntil(this._auth.signedOut)
-        .subscribe((myUserProfile: UserProfile) => this.me.next(myUserProfile));
+        .subscribe((profiles: UserProfile[]) => {
+          let users: UserProfile[] = [];
+          profiles.map(profile => {
+            if (profile.userId == this._auth.uid) {
+              this.me = profile;
+              this.meO.next(profile);
+            }
+            else {
+              users.push(profile);
+            }
+          });
+          this.otherUsers = users;
+          this.otherUsersO.next(users);
+        });
 
-    this.me
+    this.meO
         .takeUntil(this._auth.signedOut)
         .subscribe((myUserProfile: UserProfile) => {
           this._userStore
               .getFriends(myUserProfile.friends)
-              .then(friends => this.friends.next(friends))
+              .then(friends => {
+                this.friends = friends;
+                this.friendsO.next(friends)
+              })
         });
   }
 }

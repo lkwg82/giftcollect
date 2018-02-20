@@ -1,6 +1,6 @@
 <ion-header>
   <ion-navbar>
-    <ion-title>Nutzer ({{users.length + 1}})</ion-title>
+    <ion-title>Nutzer ({{otherUsers.length + 1}})</ion-title>
   </ion-navbar>
 </ion-header>
 
@@ -15,9 +15,9 @@
         <p>userid: {{ me.userId }}</p>
       </ion-item>
     </ion-item-group>
-    <ion-item-group *ngIf="users.length > 0">
-      <ion-item-divider color="light">other users ({{users.length}})</ion-item-divider>
-      <ion-item *ngFor="let user of users">
+    <ion-item-group *ngIf="otherUsers.length > 0">
+      <ion-item-divider color="light">other users ({{otherUsers.length}})</ion-item-divider>
+      <ion-item *ngFor="let user of otherUsers">
         <h2>{{ user.displayName }}</h2>
         <p>email: {{ user.email }}</p>
         <p>userid: {{ user.userId }}</p>

@@ -1,7 +1,6 @@
 import {Component} from '@angular/core';
 import {Friend, UserProfile, UserStore} from "../../providers/userstore";
 import {AuthServiceProvider} from "../../providers/auth-service/auth-service";
-import {Subscription} from "rxjs/Subscription";
 import {UserService} from "../../providers/user/userService";
 
 @Component({
@@ -9,24 +8,23 @@ import {UserService} from "../../providers/user/userService";
              templateUrl: 'users.html',
            })
 export class UsersPage {
-  users: UserProfile[] = [];
+  otherUsers: UserProfile[] = [];
   me: UserProfile = new UserProfile("x", "", "", 1, "");
-
-  private usersSubscription: Subscription;
 
   constructor(private _userStore: UserStore,
               private _auth: AuthServiceProvider,
               private _userService: UserService) {
+
+    this.me = this._userService.me;
+    this.otherUsers = this._userService.otherUsers;
   }
 
   ionViewDidLoad() {
     console.log("loaded UsersPage");
-    this._userService.me.subscribe(me => this.me = me);
-    this._userService.friends.subscribe(friends => this.users = friends);
-  }
-
-  ionViewWillLeave() {
-    this.usersSubscription.unsubscribe();
+    this._userService.meO
+        .subscribe(me => this.me = me);
+    this._userService.otherUsersO
+        .subscribe(otherUsers => this.otherUsers = otherUsers);
   }
 
   addAsFriend(user: UserProfile) {
@@ -43,7 +41,6 @@ export class UsersPage {
   }
 
   areFriends(user: UserProfile): boolean {
-    console.dir(user);
     let friends = this.me.friends;
     if (friends) {
       return friends.map(f => f.userId == user.userId).length == 1
