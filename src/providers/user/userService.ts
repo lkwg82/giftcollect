@@ -22,7 +22,7 @@ export class UserService {
         .subscribe((myUserProfile: UserProfile) => {
           this._userStore
               .getFriends(myUserProfile.friends)
-              .then(friends => this.friends.next(friends.filter(f => f != undefined)))
+              .then(friends => this.friends.next(friends))
         });
   }
 }

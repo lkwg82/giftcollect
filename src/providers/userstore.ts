@@ -172,14 +172,20 @@ export class UserStore {
   }
 
   getFriends(friends: Friend[]): Promise<UserProfile[]> {
-    if (friends) {
-      let promises: Promise<UserProfile>[] = [];
-      let userIds = friends.map(f => f.userId);
-      userIds.forEach(uid => promises.push(this.getProfileById(uid)));
-      return Promise.all(promises)
-                    .then(profiles => Promise.resolve(profiles));
+    if (!friends) {
+      return Promise.resolve([]);
     }
-    return Promise.resolve([]);
+
+    let promises: Promise<UserProfile>[] = [];
+    let userIds = friends.map(f => f.userId);
+    userIds.forEach(uid => promises.push(this.getProfileById(uid)));
+    return Promise.all(promises)
+                  .then(profiles => {
+                    // filter friends which are removed as users
+                    // to avoid undefined friends
+                    return Promise.resolve(profiles.filter(f => f != undefined));
+                  })
+                  .catch(e => Promise.reject(e));
   }
 
   getProfileById(uid: string): Promise<UserProfile> {
