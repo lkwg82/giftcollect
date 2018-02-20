@@ -14,11 +14,18 @@
 
 
 <ion-content padding>
+
   <ion-list>
+    <ion-item>
+      <button ion-button align-items-center="" clear color="danger" icon-only large
+              title="Gruppe erstellen"
+              (click)="createGroup()">
+        <ion-icon name="people"></ion-icon>
+        Gruppe erstellen
+      </button>
+    </ion-item>
     <ion-item *ngFor="let f of friends">
-      <h2>{{ f.displayName }}</h2>
-      <p>email: {{ f.email }}</p>
-      <p>userid: {{ f.userId }}</p>
+      <user-profile [user]="f"></user-profile>
       <button ion-button item-end clear color="danger" icon-only large title="Freunschaft beenden"
               (click)="finishFriendship(f)">
         <ion-icon name="remove-circle"></ion-icon>

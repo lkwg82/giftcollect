@@ -26,6 +26,7 @@ import {CurrentUser} from "../providers/user/CurrentUser";
 import {FriendsPage} from "../pages/friends/friends";
 import {UserService} from '../providers/user/userService';
 import {HintComponent} from '../components/hint/hint';
+import {UserProfileComponent} from '../components/user-profile/user-profile';
 
 export const firebaseConfig = {
   apiKey: "AIzaSyAxO7i-Ekduq6VbeLkouU6pFnOiD28xCLg",
@@ -49,7 +50,9 @@ export const firebaseConfig = {
               HomePage,
               LoginPage,
               UsersPage,
+              /* components */
               HintComponent,
+              UserProfileComponent,
             ],
             imports: [
               BrowserModule,
@@ -69,7 +72,9 @@ export const firebaseConfig = {
               HomePage,
               LoginPage,
               UsersPage,
+              /* components */
               HintComponent,
+              UserProfileComponent,
             ],
             providers: [
               AngularFireAuth,

@@ -1,4 +1,5 @@
-import { Component } from '@angular/core';
+import {Component, Input} from '@angular/core';
+import {UserProfile} from "../../providers/userstore";
 
 /**
  * Generated class for the UserProfileComponent component.
@@ -7,16 +8,18 @@ import { Component } from '@angular/core';
  * Components.
  */
 @Component({
-  selector: 'user-profile',
-  templateUrl: 'user-profile.html'
-})
+             selector: 'user-profile',
+             template: `
+               <h2>{{ user.displayName }}</h2>
+               <p>email: {{ user.email }}</p>
+               <p>userid: {{ user.userId }}</p>
+             `
+           })
 export class UserProfileComponent {
-
+  @Input() user: UserProfile;
   text: string;
 
   constructor() {
-    console.log('Hello UserProfileComponent Component');
-    this.text = 'Hello World';
   }
 
 }

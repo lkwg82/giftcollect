@@ -18,9 +18,7 @@
     <ion-item-group *ngIf="otherUsers.length > 0">
       <ion-item-divider color="light">other users ({{otherUsers.length}})</ion-item-divider>
       <ion-item *ngFor="let user of otherUsers">
-        <h2>{{ user.displayName }}</h2>
-        <p>email: {{ user.email }}</p>
-        <p>userid: {{ user.userId }}</p>
+        <user-profile [user]="user"></user-profile>
         <button *ngIf="!areFriends(user)"
                 ion-button item-end clear icon-only large (click)="addAsFriend(user)" title="add as friend">
           <ion-icon name="person-add"></ion-icon>
