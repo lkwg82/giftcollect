@@ -22,7 +22,7 @@
         <p>email: {{ user.email }}</p>
         <p>userid: {{ user.userId }}</p>
         <button *ngIf="!areFriends(user)"
-                ion-button item-end clear icon-only large (click)="addAsFriend(event)" title="add as friend">
+                ion-button item-end clear icon-only large (click)="addAsFriend(user)" title="add as friend">
           <ion-icon name="person-add"></ion-icon>
         </button>
       </ion-item>

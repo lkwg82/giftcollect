@@ -28,6 +28,11 @@ export class UsersPage {
   }
 
   addAsFriend(user: UserProfile) {
+    if (!user) {
+      console.error("user undefined");
+      return false;
+    }
+
     if (!this.me.friends) {
       this.me.friends = [];
     }
