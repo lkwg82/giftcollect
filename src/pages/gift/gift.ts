@@ -33,6 +33,10 @@ export class GiftPage {
     this.gift.owner = this._auth.uid;
   }
 
+  ionViewWillLeave() {
+    this._giftStore.addOrUpdate(this.gift);
+  }
+
   takePicture() {
     this.camera.getPicture({
                              destinationType: this.camera.DestinationType.DATA_URL,
@@ -46,11 +50,6 @@ export class GiftPage {
     });
   }
 
-  addOrUpdateGift() {
-    this._giftStore.addOrUpdate(this.gift);
-    this._nav.pop();
-  }
-
   delete(gift: Gift) {
     let profileModal = this.modalCtrl.create(GiftDeleteYesnoPage, {"gift": gift});
     profileModal.onDidDismiss((deleteIt: boolean) => {
@@ -60,6 +59,14 @@ export class GiftPage {
       }
     });
     profileModal.present();
+  }
+
+  showDescription() {
+    this.gift.description = "deine Beschreibung";
+  }
+
+  showEstimatedPrice() {
+    this.gift.estimatedPrice = 10;
   }
 }
 

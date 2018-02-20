@@ -13,41 +13,49 @@
 </ion-header>
 
 <ion-content padding>
+  <ion-item>
+    <ion-input type="text" placeholder="Titel" [(ngModel)]="gift.title"></ion-input>
+  </ion-item>
   <ion-grid>
     <ion-row>
-      <ion-col col-3>
-        <button ion-button round outline (click)="takePicture()">
+      <ion-col>
+        <button ion-button outline (click)="takePicture()">
           <ion-icon name="camera"></ion-icon>
         </button>
-      </ion-col>
-      <ion-col col-9>
-        <ion-item>
-          <ion-input type="text" placeholder="Titel" [(ngModel)]="gift.title"></ion-input>
-        </ion-item>
+        <button ion-button [outline]="!gift.description"
+                title="füge eine Beschreibung hinzu"
+                (click)="showDescription()">
+          <ion-icon name="clipboard"></ion-icon>
+        </button>
+        <button ion-button [outline]="!gift.estimatedPrice"
+                title="füge einen Preis hinzu"
+                (click)="showEstimatedPrice()">
+          €
+        </button>
+        <button ion-button outline>
+          <ion-icon name="help"></ion-icon>
+        </button>
       </ion-col>
     </ion-row>
   </ion-grid>
-  Latest Picture:
-  <img [src]="base64Image" *ngIf="base64Image"/>
-  <ion-input type="text" [value]="size"></ion-input>
-  <ion-item>
-    <ion-textarea placeholder="Beschreibung" [(ngModel)]="gift.description"></ion-textarea>
+  <!--Latest Picture:-->
+  <!--<img [src]="base64Image" *ngIf="base64Image"/>-->
+  <!--<ion-input type="text" [value]="size"></ion-input>-->
+
+  <ion-item *ngIf="gift.description">
+    <ion-textarea placeholder="Beschreibung"
+                  [(ngModel)]="gift.description"></ion-textarea>
   </ion-item>
-  <ion-item>
+  <ion-item *ngIf="gift.estimatedPrice">
     <ion-label>geschätzter Preis (€)</ion-label>
     <ion-input type="number" [(ngModel)]="gift.estimatedPrice"></ion-input>
   </ion-item>
-  <ion-item>
+  <ion-item *ngIf="gift.doNotExceedPrice">
     <ion-label>nicht teurer</ion-label>
     <ion-checkbox [(ngModel)]="gift.doNotExceedPrice"></ion-checkbox>
   </ion-item>
-  <ion-item>
+  <ion-item *ngIf="gift.doAskBeforeBuy">
     <ion-label>vorher nochmal fragen</ion-label>
     <ion-checkbox [(ngModel)]="gift.doAskBeforeBuy"></ion-checkbox>
   </ion-item>
-  <div>&nbsp;</div>
-  <button ion-button full (click)="addOrUpdateGift()">
-    <span *ngIf="changing">speichern</span>
-    <span *ngIf="!changing">eintragen</span>
-  </button>
 </ion-content>
