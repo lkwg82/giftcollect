@@ -1,12 +1,6 @@
 import {Component, Input} from '@angular/core';
 import {UserProfile} from "../../providers/userstore";
 
-/**
- * Generated class for the UserProfileComponent component.
- *
- * See https://angular.io/api/core/Component for more info on Angular
- * Components.
- */
 @Component({
              selector: 'user-profile',
              template: `
@@ -17,9 +11,4 @@ import {UserProfile} from "../../providers/userstore";
            })
 export class UserProfileComponent {
   @Input() user: UserProfile;
-  text: string;
-
-  constructor() {
-  }
-
 }
