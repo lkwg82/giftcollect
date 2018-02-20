@@ -36,11 +36,7 @@ export class AuthServiceProvider {
 
     let auth = this.afAuth.auth;
 
-    return auth.signInWithPopup(authProvider).then((result) => {
-      // this.additionalUserInfo = result.additionalUserInfo
-    }).catch(function (error) {
-      console.error(error);
-    });
+    return auth.signInWithPopup(authProvider);
   }
 
   get uid(): string {
