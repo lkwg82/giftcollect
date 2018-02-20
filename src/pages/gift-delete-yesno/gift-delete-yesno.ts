@@ -2,12 +2,6 @@ import {Component} from '@angular/core';
 import {NavParams, ViewController} from "ionic-angular";
 import {Gift} from "../../app/domain/gift";
 
-/**
- * Generated class for the GiftDeleteYesnoPage page.
- *
- * See https://ionicframework.com/docs/components/#navigation for more info on
- * Ionic pages and navigation.
- */
 @Component({
              selector: 'page-gift-delete-yesno',
              templateUrl: 'gift-delete-yesno.html',
