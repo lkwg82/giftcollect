@@ -55,7 +55,8 @@ export class MyApp {
             .subscribe(candidates => this.decorateMenuEntryCandidates(candidates));
 
         this._userService.friendsO.subscribe(friends => this.decorateMenuEntryFriends(friends));
-        this._userService.otherUsersO.subscribe(users => this.usersCount = users.length);
+        this.usersCount = this._userService.otherUsers.length + 1;
+        this._userService.otherUsersO.subscribe(users => this.usersCount = users.length + 1);
 
         if (state.approved) {
           this.nav.setRoot(HomePage);
