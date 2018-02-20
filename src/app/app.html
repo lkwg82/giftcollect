@@ -8,7 +8,7 @@
     <ion-list>
       <button ion-item menuClose (click)="showFriends()" [ngClass]="classes">
         <ion-icon name="people"></ion-icon>
-        Freunde
+        Freunde <span itemCount *ngIf="friendsCount>0">{{friendsCount}}</span>
       </button>
       <button ion-item menuClose (click)="signOut()">
         <ion-icon name="log-out"></ion-icon>
@@ -18,11 +18,11 @@
         <ion-item-divider color="light">admin</ion-item-divider>
         <button ion-item menuClose (click)="showCandidates()" [ngClass]="classes">
           <ion-icon name="people"></ion-icon>
-          Kandidaten <span candidatesCount *ngIf="candidatesCount>0">{{candidatesCount}}</span>
+          Kandidaten <span itemCount *ngIf="candidatesCount>0">{{candidatesCount}}</span>
         </button>
         <button ion-item menuClose (click)="showUsers()" [ngClass]="classes">
           <ion-icon name="people"></ion-icon>
-          Nutzer
+          Nutzer <span itemCount *ngIf="usersCount>0">{{usersCount}}</span>
         </button>
       </ion-item-group>
     </ion-list>
