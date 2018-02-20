@@ -1,6 +1,5 @@
 import {Component} from '@angular/core';
 import {Friend, UserProfile, UserStore} from "../../providers/userstore";
-import {AuthServiceProvider} from "../../providers/auth-service/auth-service";
 import {UserService} from "../../providers/user/userService";
 
 @Component({
@@ -12,7 +11,6 @@ export class UsersPage {
   me: UserProfile = new UserProfile("x", "", "", 1, "");
 
   constructor(private _userStore: UserStore,
-              private _auth: AuthServiceProvider,
               private _userService: UserService) {
 
     this.me = this._userService.me;
