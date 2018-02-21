@@ -1,5 +1,6 @@
 {
   "rules": {
+    "deprecation":true,
     "no-duplicate-variable": true,
     "no-unused-variable": [
       true
