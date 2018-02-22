@@ -16,7 +16,7 @@ export class AuthServiceProvider {
   constructor(private afAuth: AngularFireAuth) {
     this.state = afAuth.authState;
     this.state.subscribe((user: firebase.User) => {
-      console.log("user", user);
+      console.debug("user", user);
       this._user = user;
     });
 
