@@ -259,13 +259,6 @@ export class UserStore {
     return this._storage.createUserCandidate(userCandidate);
   }
 
-  /**
-   * @deprecated
-   */
-  updateProfile(userProfile: UserProfile): Promise<void> {
-    return this._storage.updateProfile(userProfile)
-  }
-
   get changes(): Changes {
     return new Changes(this._storage);
   }

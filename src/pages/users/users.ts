@@ -1,5 +1,5 @@
 import {Component} from '@angular/core';
-import {Friend, UserProfile, UserStore} from "../../providers/userstore";
+import {Friend, UserProfile} from "../../providers/userstore";
 import {UserService} from "../../providers/user/userService";
 
 @Component({
@@ -10,8 +10,7 @@ export class UsersPage {
   otherUsers: UserProfile[] = [];
   me: UserProfile = new UserProfile("x", "", "", 1, "");
 
-  constructor(private _userStore: UserStore,
-              private _userService: UserService) {
+  constructor(private _userService: UserService) {
 
     this.me = this._userService.me;
     this.otherUsers = this._userService.otherUsers;
@@ -35,7 +34,7 @@ export class UsersPage {
       this.me.friends = [];
     }
     this.me.friends.push(Friend.fromUserProfile(user));
-    this._userStore
+    this._userService
         .updateProfile(this.me)
         .then(() => {
           console.log("as friend added");

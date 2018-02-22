@@ -1,5 +1,5 @@
 import {Component} from '@angular/core';
-import {Friend, UserProfile, UserStore} from "../../providers/userstore";
+import {Friend, UserProfile} from "../../providers/userstore";
 import {UserService} from "../../providers/user/userService";
 import {NavController} from "ionic-angular";
 import {FriendsGroupCreatePage} from "../friends-group-create/friends-group-create";
@@ -12,8 +12,7 @@ export class FriendsPage {
   friends: UserProfile[] = [];
   me: UserProfile;
 
-  constructor(private _userStore: UserStore,
-              private _userService: UserService,
+  constructor(private _userService: UserService,
               private _navCtrl: NavController) {
     this.me = this._userService.me;
     this.friends = this._userService.friends;
@@ -29,7 +28,7 @@ export class FriendsPage {
 
   finishFriendship(friend: Friend) {
     this.me.friends = this.me.friends.filter(f => f == friend);
-    this._userStore
+    this._userService
         .updateProfile(this.me)
         .then(() => {
           console.log("updated profile", this.me);
