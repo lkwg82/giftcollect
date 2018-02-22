@@ -1,5 +1,5 @@
 import {Injectable} from '@angular/core';
-import {UserProfile, UserStore} from "../userstore";
+import {UserProfile, UserStorage, UserStore} from "../userstore";
 import {AuthServiceProvider} from "../auth-service/auth-service";
 import {Subject} from "rxjs/Subject";
 
@@ -15,7 +15,8 @@ export class UserService {
   otherUsers: UserProfile[] = [];
 
   constructor(private _userStore: UserStore,
-              private _auth: AuthServiceProvider) {
+              private _auth: AuthServiceProvider,
+              private _firestoreDriver: UserStorage) {
     console.log('Hello UserProvider Provider');
 
     this._userStore
@@ -47,5 +48,9 @@ export class UserService {
                 this.friendsO.next(friends)
               })
         });
+  }
+
+  updateProfile(userProfile: UserProfile): Promise<void> {
+    return this._firestoreDriver.updateProfile(userProfile)
   }
 }

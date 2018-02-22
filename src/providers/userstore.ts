@@ -2,6 +2,7 @@ import {Injectable} from "@angular/core";
 import {AngularFirestore} from "angularfire2/firestore";
 import {Observable} from "rxjs/Observable";
 import {AuthServiceProvider} from "./auth-service/auth-service";
+import {Observer} from "rxjs/Observer";
 
 export class UserCandidate {
   constructor(readonly userId: string,
@@ -12,8 +13,39 @@ export class UserCandidate {
   }
 }
 
+export class Groups {
+  private _groups: Map<string, Set<string>> = new Map<string, Set<string>>();
+
+  add(name: string, userid: string) {
+    let groups = this._groups;
+    let group = groups.get(name);
+
+    if (group) {
+      group.add(userid);
+    }
+    else {
+      groups.set(name, new Set<string>([userid]))
+    }
+  }
+
+  toJSON() {
+    let obj: { [k: string]: any } = {};
+    obj.groups = {};
+    this._groups.forEach((value: Set<string>, key: string) => {
+      obj.groups[key] = Array.from(value.values());
+    });
+    return obj;
+  }
+
+  static fromObject(groups: Groups): Groups {
+    return new Groups();
+  }
+}
+
 export class UserProfile {
+
   friends: Friend[] = [];
+  groups: Groups = new Groups();
 
   constructor(readonly userId: string,
               readonly email: string,
@@ -28,6 +60,18 @@ export class UserProfile {
                            candidate.displayName,
                            Date.now(),
                            new Date().toUTCString());
+  }
+
+  static fromObject(p: UserProfile): UserProfile {
+    let profile = new UserProfile(p.userId,
+                                  p.email,
+                                  p.displayName,
+                                  p.createdAt,
+                                  p.createdAtReadable);
+    profile.friends = p.friends;
+    profile.groups = Groups.fromObject(p.groups);
+
+    return profile;
   }
 }
 
@@ -125,11 +169,19 @@ export class UserStorage {
   updateProfile(userProfile: UserProfile): Promise<void> {
     return this._users()
                .doc(userProfile.userId)
-               .update(UserStorage.asObject(userProfile))
+               .set(UserStorage.asObject(userProfile), this.setOptions)
   }
 
   usersValueChanges(): Observable<UserProfile[]> {
-    return this._users().valueChanges();
+    let observer = (observer: Observer<UserProfile[]>) => {
+      this._users()
+          .valueChanges()
+          .takeUntil(this._auth.signedOut)
+          .subscribe((dct: UserProfile[]) => {
+            observer.next(dct.map(d => UserProfile.fromObject(d)));
+          });
+    };
+    return Observable.create(observer);
   }
 
   private _myProfile() {
@@ -207,6 +259,9 @@ export class UserStore {
     return this._storage.createUserCandidate(userCandidate);
   }
 
+  /**
+   * @deprecated
+   */
   updateProfile(userProfile: UserProfile): Promise<void> {
     return this._storage.updateProfile(userProfile)
   }

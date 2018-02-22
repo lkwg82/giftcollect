@@ -1,24 +1,71 @@
 import {Component} from '@angular/core';
-import {NavController, NavParams} from "ionic-angular";
+import {AlertController, NavController} from "ionic-angular";
+import {UserService} from "../../providers/user/userService";
+import {UserProfile} from "../../providers/userstore";
+import {FriendsGroupCreateStep2Page} from "../friends-group-create-step2/friends-group-create-step2";
 
-/**
- * Generated class for the FriendsGroupCreatePage page.
- *
- * See https://ionicframework.com/docs/components/#navigation for more info on
- * Ionic pages and navigation.
- */
 @Component({
              selector: 'page-friends-group-create',
              templateUrl: 'friends-group-create.html',
            })
 export class FriendsGroupCreatePage {
+  friends: SelectableUserProfile[] = [];
+  me: UserProfile;
 
-  constructor(public navCtrl: NavController,
-              public navParams: NavParams) {
+  selectedUsers: UserProfile[] = [];
+
+  constructor(private _userService: UserService,
+              private _navCtrl: NavController,
+              private alertCtrl: AlertController) {
   }
 
   ionViewDidLoad() {
     console.log('ionViewDidLoad FriendsGroupCreatePage');
+    this.friends = this._userService.friends.map(f => new SelectableUserProfile(f));
+    this._userService.friendsO
+        .subscribe(friends => this.friends = friends.map(f => new SelectableUserProfile(f)));
+    this._userService.meO
+        .subscribe(profile => this.me = profile);
   }
 
+  add(user: SelectableUserProfile) {
+    user.selected = true;
+
+    let without = this.selectedUsers.filter(u => u != user);
+    if (without.length == this.selectedUsers.length) {
+      this.selectedUsers.push(user);
+    }
+  }
+
+  remove(user: SelectableUserProfile) {
+    user.selected = false;
+    this.selectedUsers = this.selectedUsers.filter(u => u != user);
+  }
+
+  next() {
+    if (this.selectedUsers.length == 0) {
+      let alert = this.alertCtrl.create({
+                                          subTitle: 'mindestens ein Kontakt muss ausgewählt werden',
+                                        });
+      alert.present().then(() => {
+        setTimeout(() => {
+          alert.dismiss()
+        }, 500);
+      })
+    } else {
+      this._navCtrl.push(FriendsGroupCreateStep2Page, {'selectedUsers': this.selectedUsers});
+    }
+  }
+}
+
+class SelectableUserProfile extends UserProfile {
+  selected: boolean = false;
+
+  constructor(user: UserProfile) {
+    super(user.userId,
+          user.email,
+          user.displayName,
+          user.createdAt,
+          user.createdAtReadable)
+  }
 }

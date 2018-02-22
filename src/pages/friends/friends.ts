@@ -1,6 +1,8 @@
 import {Component} from '@angular/core';
 import {Friend, UserProfile, UserStore} from "../../providers/userstore";
 import {UserService} from "../../providers/user/userService";
+import {NavController} from "ionic-angular";
+import {FriendsGroupCreatePage} from "../friends-group-create/friends-group-create";
 
 @Component({
              selector: 'page-friends',
@@ -11,7 +13,8 @@ export class FriendsPage {
   me: UserProfile;
 
   constructor(private _userStore: UserStore,
-              private _userService: UserService) {
+              private _userService: UserService,
+              private _navCtrl: NavController) {
     this.me = this._userService.me;
     this.friends = this._userService.friends;
   }
@@ -19,7 +22,7 @@ export class FriendsPage {
   ionViewWillEnter() {
     console.log("loaded FriendsPage");
     this._userService.friendsO
-        .subscribe(friends => this.friends = friends)
+        .subscribe(friends => this.friends = friends);
     this._userService.meO
         .subscribe(profile => this.me = profile);
   }
@@ -32,5 +35,9 @@ export class FriendsPage {
           console.log("updated profile", this.me);
         })
         .catch(e => console.error(e));
+  }
+
+  createGroup() {
+    this._navCtrl.push(FriendsGroupCreatePage)
   }
 }

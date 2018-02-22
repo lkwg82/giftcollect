@@ -27,6 +27,8 @@ import {FriendsPage} from "../pages/friends/friends";
 import {UserService} from '../providers/user/userService';
 import {HintComponent} from '../components/hint/hint';
 import {UserProfileComponent} from '../components/user-profile/user-profile';
+import {FriendsGroupCreatePage} from "../pages/friends-group-create/friends-group-create";
+import {FriendsGroupCreateStep2Page} from "../pages/friends-group-create-step2/friends-group-create-step2";
 
 export const firebaseConfig = {
   apiKey: "AIzaSyAxO7i-Ekduq6VbeLkouU6pFnOiD28xCLg",
@@ -45,6 +47,8 @@ export const firebaseConfig = {
               ApprovalPage,
               CandidatesPage,
               FriendsPage,
+              FriendsGroupCreatePage,
+              FriendsGroupCreateStep2Page,
               GiftPage,
               GiftDeleteYesnoPage,
               HomePage,
@@ -67,6 +71,8 @@ export const firebaseConfig = {
               ApprovalPage,
               CandidatesPage,
               FriendsPage,
+              FriendsGroupCreatePage,
+              FriendsGroupCreateStep2Page,
               GiftPage,
               GiftDeleteYesnoPage,
               HomePage,

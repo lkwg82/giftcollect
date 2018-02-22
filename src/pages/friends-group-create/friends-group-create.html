@@ -1,18 +1,30 @@
-<!--
-  Generated template for the FriendsGroupCreatePage page.
-
-  See http://ionicframework.com/docs/components/#navigation for more info on
-  Ionic pages and navigation.
--->
 <ion-header>
-
-  <ion-navbar>
-    <ion-title>friends-group-create</ion-title>
-  </ion-navbar>
-
+  <ion-toolbar>
+    <ion-title>Neue Gruppe<br>
+      <span>Teilnehmer hinzufügen</span>
+    </ion-title>
+  </ion-toolbar>
 </ion-header>
 
 
 <ion-content padding>
-
+  <ion-fab right bottom>
+    <button ion-fab color="secondary" (click)="next()">
+      <ion-icon name="arrow-forward"></ion-icon>
+    </button>
+  </ion-fab>
+  <button *ngFor="let su of selectedUsers" (click)="remove(su)">
+    <ion-icon name="person"></ion-icon>
+    {{ su.displayName }}
+  </button>
+  <ion-list inset>
+    <ion-list-header>
+      Freunde
+    </ion-list-header>
+    <ion-item *ngFor="let user of friends">
+      <button ion-item (click)="add(user)">{{user.selected}}
+        <user-profile [user]="user"></user-profile>
+      </button>
+    </ion-item>
+  </ion-list>
 </ion-content>
