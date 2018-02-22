@@ -5,7 +5,7 @@ import {SplashScreen} from '@ionic-native/splash-screen';
 import {LoginPage} from "../pages/login/login";
 import {CurrentUser, State} from "../providers/user/CurrentUser";
 import {ApprovalPage} from "../pages/approval/approval";
-import {Friend, UserCandidate, UserStore} from "../providers/userstore";
+import {Friend, UserCandidate} from "../providers/storage/firestoreDriver";
 import {CandidatesPage} from "../pages/candidates/candidates";
 import {UsersPage} from "../pages/users/users";
 import {AuthServiceProvider} from "../providers/auth-service/auth-service";
@@ -30,7 +30,6 @@ export class MyApp {
               statusBar: StatusBar,
               splashScreen: SplashScreen,
               private _currentUser: CurrentUser,
-              private _userStore: UserStore,
               private _userService: UserService,
               private _auth: AuthServiceProvider) {
   }
@@ -42,7 +41,7 @@ export class MyApp {
       if (state.authenticated) {
         this.approved = state.approved;
 
-        this._userStore.changes.candidates()
+        this._userService.changes.candidates()
             .takeUntil(this._auth.signedOut)
             .subscribe(candidates => this.decorateMenuEntryCandidates(candidates));
 

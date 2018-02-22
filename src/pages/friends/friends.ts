@@ -1,5 +1,5 @@
 import {Component} from '@angular/core';
-import {Friend, UserProfile} from "../../providers/userstore";
+import {Friend, UserProfile} from "../../providers/storage/firestoreDriver";
 import {UserService} from "../../providers/user/userService";
 import {NavController} from "ionic-angular";
 import {FriendsGroupCreatePage} from "../friends-group-create/friends-group-create";

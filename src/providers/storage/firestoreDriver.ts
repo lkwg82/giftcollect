@@ -1,7 +1,7 @@
 import {Injectable} from "@angular/core";
 import {AngularFirestore} from "angularfire2/firestore";
 import {Observable} from "rxjs/Observable";
-import {AuthServiceProvider} from "./auth-service/auth-service";
+import {AuthServiceProvider} from "../auth-service/auth-service";
 import {Observer} from "rxjs/Observer";
 
 export class UserCandidate {
@@ -86,7 +86,7 @@ export class Friend {
 }
 
 @Injectable()
-export class UserStorage {
+export class FireStoreDriver {
   private readonly setOptions = {merge: true};
   private readonly col_user_candidates = "/user_candidates";
   private readonly col_users = "/user_profiles";
@@ -119,7 +119,7 @@ export class UserStorage {
                  } else {
                    let candidate = <UserCandidate>candidateDoc.data();
                    let userProfile = UserProfile.fromCandidate(candidate);
-                   tx.set(userDocRef, UserStorage.asObject(userProfile), this.setOptions)
+                   tx.set(userDocRef, FireStoreDriver.asObject(userProfile), this.setOptions)
                      .delete(candidateDocRef);
                  }
                })
@@ -135,7 +135,7 @@ export class UserStorage {
     return this._database
                .collection(this.col_user_candidates)
                .doc(candidate.userId).ref
-               .set(UserStorage.asObject(candidate), this.setOptions)
+               .set(FireStoreDriver.asObject(candidate), this.setOptions)
                .then(_ => console.log("candidate inserted"))
                .catch((reason) => console.error(reason));
   }
@@ -169,7 +169,7 @@ export class UserStorage {
   updateProfile(userProfile: UserProfile): Promise<void> {
     return this._users()
                .doc(userProfile.userId)
-               .set(UserStorage.asObject(userProfile), this.setOptions)
+               .set(FireStoreDriver.asObject(userProfile), this.setOptions)
   }
 
   usersValueChanges(): Observable<UserProfile[]> {
@@ -205,87 +205,5 @@ export class UserStorage {
                .delete()
                .then(_ => console.log("candidate removed"))
                .catch((reason) => console.error(reason));
-  }
-}
-
-@Injectable()
-export class UserStore {
-
-  constructor(private _auth: AuthServiceProvider,
-              private _storage: UserStorage) {
-  }
-
-  acceptCandidate(candidate: UserCandidate): Promise<void> {
-    return this._storage.accept(candidate);
-  }
-
-  denyCandidate(candidate: UserCandidate): Promise<void> {
-    return this._storage.deny(candidate);
-  }
-
-  getFriends(friends: Friend[]): Promise<UserProfile[]> {
-    if (!friends) {
-      return Promise.resolve([]);
-    }
-
-    let promises: Promise<UserProfile>[] = [];
-    let userIds = friends.map(f => f.userId);
-    userIds.forEach(uid => promises.push(this.getProfileById(uid)));
-    return Promise.all(promises)
-                  .then(profiles => {
-                    // filter friends which are removed as users
-                    // to avoid undefined friends
-                    return Promise.resolve(profiles.filter(f => f != undefined));
-                  })
-                  .catch(e => Promise.reject(e));
-  }
-
-  getProfileById(uid: string): Promise<UserProfile> {
-    return this._storage.getProfileById(uid);
-  }
-
-  isApproved(): Promise<boolean> {
-    return this._storage.isApproved(this._auth.uid);
-  }
-
-  requestApproval(): Promise<void> {
-    let userCandidate = new UserCandidate(
-      this._auth.uid,
-      this._auth.email || "",
-      this._auth.displayName || "",
-      Date.now(),
-      new Date().toISOString());
-
-    return this._storage.createUserCandidate(userCandidate);
-  }
-
-  get changes(): Changes {
-    return new Changes(this._storage);
-  }
-
-  get delete(): Deletes {
-    return new Deletes(this._storage);
-  }
-}
-
-class Changes {
-  constructor(private readonly _storage: UserStorage) {
-  }
-
-  candidates(): Observable<UserCandidate[]> {
-    return this._storage.candidateValueChanges();
-  }
-
-  myProfile() {
-    return this._storage.myProfileChanges();
-  }
-
-  users(): Observable<UserProfile[]> {
-    return this._storage.usersValueChanges();
-  }
-}
-
-class Deletes {
-  constructor(private readonly _storage: UserStorage) {
   }
 }

@@ -1,7 +1,7 @@
 import {Component} from '@angular/core';
-import {AlertController, NavController} from "ionic-angular";
+import {NavController} from "ionic-angular";
 import {UserService} from "../../providers/user/userService";
-import {UserProfile} from "../../providers/userstore";
+import {UserProfile} from "../../providers/storage/firestoreDriver";
 import {FriendsGroupCreateStep2Page} from "../friends-group-create-step2/friends-group-create-step2";
 import {NoticeController} from "../../providers/view/notice/NoticeController";
 
@@ -17,7 +17,6 @@ export class FriendsGroupCreatePage {
 
   constructor(private _userService: UserService,
               private _navCtrl: NavController,
-              private alertCtrl: AlertController,
               private _noticeCtrl: NoticeController) {
   }
 

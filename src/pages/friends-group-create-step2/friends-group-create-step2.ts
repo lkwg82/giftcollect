@@ -1,6 +1,6 @@
 import {Component} from '@angular/core';
 import {NavController, NavParams} from "ionic-angular";
-import {UserProfile} from "../../providers/userstore";
+import {UserProfile} from "../../providers/storage/firestoreDriver";
 import {UserService} from "../../providers/user/userService";
 import {HomePage} from "../home/home";
 import {NoticeController} from "../../providers/view/notice/NoticeController";

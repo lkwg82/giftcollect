@@ -1,8 +1,8 @@
 import {Injectable} from "@angular/core";
 import {AuthServiceProvider} from "../auth-service/auth-service";
-import {UserStore} from "../userstore";
 import * as firebase from "firebase/app";
 import {Subject} from "rxjs/Subject";
+import {UserService} from "./userService";
 
 export class State {
   constructor(readonly authenticated: boolean,
@@ -21,7 +21,7 @@ export class CurrentUser {
   state: Subject<State> = new Subject<State>();
 
   constructor(private _auth: AuthServiceProvider,
-              private _store: UserStore) {
+              private _userService: UserService) {
     this.init();
   }
 
@@ -44,13 +44,13 @@ export class CurrentUser {
     if (user.displayName) {
       this.name = user.displayName;
     }
-    this._store
+    this._userService
         .isApproved()
         .then(approved => {
           this.userApproved = approved;
           this.state.next(new State(true, approved));
           if (!approved) {
-            this._store
+            this._userService
                 .requestApproval()
                 .catch(e => console.error("request approval", e));
           }

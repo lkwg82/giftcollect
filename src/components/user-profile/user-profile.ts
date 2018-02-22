@@ -1,5 +1,5 @@
 import {Component, Input} from '@angular/core';
-import {UserProfile} from "../../providers/userstore";
+import {UserProfile} from "../../providers/storage/firestoreDriver";
 
 @Component({
              selector: 'user-profile',
