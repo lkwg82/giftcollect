@@ -1,8 +1,9 @@
 import {Component} from '@angular/core';
-import {AlertController, NavController, NavParams} from "ionic-angular";
+import {NavController, NavParams} from "ionic-angular";
 import {UserProfile} from "../../providers/userstore";
 import {UserService} from "../../providers/user/userService";
 import {HomePage} from "../home/home";
+import {NoticeController} from "../../providers/view/notice/NoticeController";
 
 @Component({
              selector: 'page-friends-group-create-step2',
@@ -16,7 +17,7 @@ export class FriendsGroupCreateStep2Page {
   constructor(private _navCtrl: NavController,
               public navParams: NavParams,
               private _userService: UserService,
-              private _alertCtrl: AlertController) {
+              private _noticeCtrl: NoticeController) {
   }
 
   ionViewDidLoad() {
@@ -30,12 +31,8 @@ export class FriendsGroupCreateStep2Page {
   }
 
   saveGroup() {
-
     if (!this.title || this.title === "") {
-      let alert = this._alertCtrl.create({
-                                           subTitle: 'Titel darf nicht leer bleiben',
-                                         });
-      alert.present().then(() => setTimeout(() => alert.dismiss(), 500));
+      this._noticeCtrl.notice('Titel darf nicht leer bleiben');
     }
     else {
       this.selectedUsers
@@ -44,16 +41,9 @@ export class FriendsGroupCreateStep2Page {
       this._userService
           .updateProfile(this.me)
           .then(() => {
-            let alert = this._alertCtrl.create({
-                                                 title: "Gruppe '" + this.title + "' angelegt",
-                                               });
-            alert.present()
-                 .then(() => {
-                   setTimeout(() => {
-                     alert.dismiss();
-                     this._navCtrl.setRoot(HomePage);
-                   }, 500)
-                 });
+            this._noticeCtrl
+                .notice("Gruppe '" + this.title + "' angelegt")
+                .then(() => this._navCtrl.setRoot(HomePage));
           })
           .catch((e) => console.error(e))
     }

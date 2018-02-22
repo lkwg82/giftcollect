@@ -3,6 +3,7 @@ import {AlertController, NavController} from "ionic-angular";
 import {UserService} from "../../providers/user/userService";
 import {UserProfile} from "../../providers/userstore";
 import {FriendsGroupCreateStep2Page} from "../friends-group-create-step2/friends-group-create-step2";
+import {NoticeController} from "../../providers/view/notice/NoticeController";
 
 @Component({
              selector: 'page-friends-group-create',
@@ -16,7 +17,8 @@ export class FriendsGroupCreatePage {
 
   constructor(private _userService: UserService,
               private _navCtrl: NavController,
-              private alertCtrl: AlertController) {
+              private alertCtrl: AlertController,
+              private _noticeCtrl: NoticeController) {
   }
 
   ionViewDidLoad() {
@@ -44,14 +46,7 @@ export class FriendsGroupCreatePage {
 
   next() {
     if (this.selectedUsers.length == 0) {
-      let alert = this.alertCtrl.create({
-                                          subTitle: 'mindestens ein Kontakt muss ausgewählt werden',
-                                        });
-      alert.present().then(() => {
-        setTimeout(() => {
-          alert.dismiss()
-        }, 500);
-      })
+      this._noticeCtrl.notice('mindestens ein Kontakt muss ausgewählt werden')
     } else {
       this._navCtrl.push(FriendsGroupCreateStep2Page, {'selectedUsers': this.selectedUsers});
     }
