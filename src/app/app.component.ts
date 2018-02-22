@@ -33,14 +33,6 @@ export class MyApp {
               private _userStore: UserStore,
               private _userService: UserService,
               private _auth: AuthServiceProvider) {
-    platform.ready().then(() => {
-      // Okay, so the platform is ready and our plugins are available.
-      // Here you can do any higher level native things you might need.
-
-      // TODO
-      // statusBar.styleDefault();
-      // splashScreen.hide();
-    });
   }
 
   // Wait for the components in MyApp's template to be initialized
