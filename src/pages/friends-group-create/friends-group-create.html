@@ -22,7 +22,7 @@
       Freunde
     </ion-list-header>
     <ion-item *ngFor="let user of friends">
-      <button ion-item (click)="add(user)">{{user.selected}}
+      <button ion-item (click)="add(user)">
         <user-profile [user]="user"></user-profile>
       </button>
     </ion-item>
