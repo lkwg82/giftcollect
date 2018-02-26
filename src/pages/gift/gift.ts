@@ -1,10 +1,10 @@
 import {Component} from '@angular/core';
 import {Camera} from '@ionic-native/camera';
-import {ModalController, NavController, NavParams} from "ionic-angular";
+import {AlertController, NavController, NavParams} from "ionic-angular";
 import {Gift} from "../../app/domain/gift";
 import {GiftStore} from "../../providers/giftstore";
 import {AuthServiceProvider} from "../../providers/auth-service/auth-service";
-import {GiftDeleteYesnoPage} from "../gift-delete-yesno/gift-delete-yesno";
+import {NoticeController} from "../../providers/view/notice/NoticeController";
 
 
 @Component({
@@ -22,7 +22,8 @@ export class GiftPage {
               private _navParams: NavParams,
               private _giftStore: GiftStore,
               private _auth: AuthServiceProvider,
-              private modalCtrl: ModalController) {
+              private _alertCtrl: AlertController,
+              private _noticeCtrl: NoticeController,) {
   }
 
   ionViewDidLoad() {
@@ -51,14 +52,41 @@ export class GiftPage {
   }
 
   delete(gift: Gift) {
-    let profileModal = this.modalCtrl.create(GiftDeleteYesnoPage, {"gift": gift});
-    profileModal.onDidDismiss((deleteIt: boolean) => {
-      if (deleteIt) {
-        this._giftStore.delete(gift);
-        this._nav.pop();
-      }
-    });
-    profileModal.present();
+
+    let options = {
+      title: 'Geschenk löschen',
+      message: 'Möchtest du "' + gift.title + '" löschen?',
+      buttons: [
+        {
+          text: 'Abbrechen',
+          role: 'cancel',
+          handler: () => {
+            console.log('Cancel clicked');
+          }
+        },
+        {
+          text: 'Löschen',
+          handler: () => {
+            this._giftStore.delete(gift)
+                .then(() => this._noticeCtrl.notice("Geschenk gelöscht"));
+            this._nav.pop();
+          }
+        }
+      ]
+    };
+    this._alertCtrl.create(options).present();
+  }
+
+  save(gift: Gift) {
+    if (gift.title.length == 0) {
+      this._noticeCtrl.notice("Titel darf nicht leer bleiben");
+    } else {
+      this._nav.pop()
+          .then(() => this._giftStore
+                          .addOrUpdate(gift)
+                          .then(() => this._noticeCtrl.notice("gespeichert"))
+          )
+    }
   }
 
   showDescription() {

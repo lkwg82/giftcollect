@@ -4,9 +4,12 @@
       <span *ngIf="!changing">neues Geschenk anlegen</span>
       <span *ngIf="changing">Geschenk ändern</span>
     </ion-title>
-    <ion-buttons end icon-only large *ngIf="changing" (click)="delete(gift)">
-      <button ion-button>
+    <ion-buttons end icon-only large>
+      <button ion-button (click)="delete(gift)" *ngIf="changing">
         <ion-icon name="trash"></ion-icon>
+      </button>
+      <button ion-button (click)="save(gift)">
+        <ion-icon name="checkmark"></ion-icon>
       </button>
     </ion-buttons>
   </ion-navbar>
