@@ -22,7 +22,10 @@ export class HomePage {
     this.giftStore
         .valueChanges()
         .takeUntil(this._auth.signedOut)
-        .subscribe((gifts) => this.gifts = gifts);
+        .subscribe((gifts: Gift[]) => {
+          gifts.sort((a, b) => a.title.localeCompare(b.title));
+          this.gifts = gifts
+        });
   }
 
   addGift() {
