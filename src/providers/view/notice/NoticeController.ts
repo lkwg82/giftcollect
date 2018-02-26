@@ -1,19 +1,19 @@
 import {Injectable} from "@angular/core";
-import {AlertController} from "ionic-angular";
+import {ToastController} from "ionic-angular";
 
 @Injectable()
 export class NoticeController {
 
-  constructor(private _alert: AlertController) {
+  constructor(private _toastCtrl: ToastController) {
   }
 
-  notice(text: string, dismissTimeout: number = 500): Promise<void> {
-    let alert = this._alert.create({subTitle: text});
-    return alert.present()
-                .then(() => {
-                  setTimeout(() => alert.dismiss(), dismissTimeout);
-                  return Promise.resolve();
-                })
-                .catch(e => Promise.reject(e));
+  notice(text: string, dismissTimeout: number = 1000): Promise<void> {
+
+    let opts = {
+      message: text,
+      duration: dismissTimeout,
+      position: 'bottom'
+    };
+    return this._toastCtrl.create(opts).present();
   }
 }
