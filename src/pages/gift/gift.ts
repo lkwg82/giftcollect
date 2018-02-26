@@ -84,7 +84,7 @@ export class GiftPage {
       this._nav.pop()
           .then(() => this._giftStore
                           .addOrUpdate(gift)
-                          .then(() => this._noticeCtrl.notice("gespeichert"))
+                          .then(() => this._noticeCtrl.notice("Geschenk gespeichert"))
           )
     }
   }
