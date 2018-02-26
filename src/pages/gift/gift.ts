@@ -1,4 +1,4 @@
-import {Component} from '@angular/core';
+import {Component, ViewChild} from '@angular/core';
 import {Camera} from '@ionic-native/camera';
 import {AlertController, NavController, NavParams} from "ionic-angular";
 import {Gift} from "../../app/domain/gift";
@@ -12,6 +12,8 @@ import {NoticeController} from "../../providers/view/notice/NoticeController";
              templateUrl: 'gift.html',
            })
 export class GiftPage {
+  @ViewChild('title') title: any;
+
   public base64Image: string = "";
 
   gift: Gift = new Gift("");
@@ -23,7 +25,7 @@ export class GiftPage {
               private _giftStore: GiftStore,
               private _auth: AuthServiceProvider,
               private _alertCtrl: AlertController,
-              private _noticeCtrl: NoticeController,) {
+              private _noticeCtrl: NoticeController) {
   }
 
   ionViewDidLoad() {
@@ -32,6 +34,12 @@ export class GiftPage {
       this.changing = true;
     }
     this.gift.owner = this._auth.uid;
+  }
+
+  ngOnInit() {
+    setTimeout(() => {
+      this.title.setFocus();
+    }, 150);
   }
 
   ionViewWillLeave() {

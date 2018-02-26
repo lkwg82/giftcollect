@@ -17,7 +17,7 @@
 
 <ion-content padding>
   <ion-item>
-    <ion-input type="text" placeholder="Titel" [(ngModel)]="gift.title"></ion-input>
+    <ion-input type="text" placeholder="Titel" [(ngModel)]="gift.title" #title></ion-input>
   </ion-item>
   <ion-grid>
     <ion-row>
@@ -47,7 +47,7 @@
 
   <ion-item *ngIf="gift.description">
     <ion-textarea placeholder="Beschreibung"
-                  [(ngModel)]="gift.description"></ion-textarea>
+                  [(ngModel)]="gift.description" #inputToFocus></ion-textarea>
   </ion-item>
   <ion-item *ngIf="gift.estimatedPrice">
     <ion-label>geschätzter Preis (€)</ion-label>
