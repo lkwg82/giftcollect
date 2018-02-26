@@ -1,18 +1,9 @@
-<!--
-  Generated template for the FriendsGroupCreateStep2Page page.
-
-  See http://ionicframework.com/docs/components/#navigation for more info on
-  Ionic pages and navigation.
--->
 <ion-header>
-
   <ion-navbar>
-    <ion-title>Neue Gruppe<br>
-      <span>Betreff hinzufügen</span></ion-title>
+    <ion-title *ngIf="!changing">Neue Gruppe<br> <span>Name hinzufügen</span></ion-title>
+    <ion-title *ngIf="changing">Gruppe<br> <span>Name ändern</span></ion-title>
   </ion-navbar>
-
 </ion-header>
-
 
 <ion-content padding>
   <ion-fab right bottom>
@@ -22,9 +13,8 @@
   </ion-fab>
   <ion-list inset>
     <ion-item>
-      <ion-input type="text" placeholder="Titel" [(ngModel)]="title"></ion-input>
+      <ion-input type="text" placeholder="Name" [(ngModel)]="group.name"></ion-input>
     </ion-item>
-
     <ion-item>
       <button *ngFor="let su of selectedUsers">
         <ion-icon name="person"></ion-icon>

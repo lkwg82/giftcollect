@@ -1,8 +1,9 @@
 import {Component} from '@angular/core';
-import {Friend, UserProfile} from "../../providers/storage/firestoreDriver";
+import {Friend, Group, UserProfile} from "../../providers/storage/firestoreDriver";
 import {UserService} from "../../providers/user/userService";
 import {NavController} from "ionic-angular";
-import {FriendsGroupCreatePage} from "../friends-group-create/friends-group-create";
+import {FriendsGroupPage} from "../friends-group/friends-group";
+import {Subject} from "rxjs/Subject";
 
 @Component({
              selector: 'page-friends',
@@ -12,6 +13,8 @@ export class FriendsPage {
   friends: UserProfile[] = [];
   me: UserProfile;
 
+  private stop$ = new Subject<void>();
+
   constructor(private _userService: UserService,
               private _navCtrl: NavController) {
     this.me = this._userService.me;
@@ -20,10 +23,19 @@ export class FriendsPage {
 
   ionViewWillEnter() {
     console.log("loaded FriendsPage");
+
+    this.friends = this._userService.friends;
     this._userService.friendsO
+        .takeUntil(this.stop$)
         .subscribe(friends => this.friends = friends);
+    this.me = this._userService.me;
     this._userService.meO
+        .takeUntil(this.stop$)
         .subscribe(profile => this.me = profile);
+  }
+
+  ionViewDidLeave() {
+    this.stop$.complete();
   }
 
   finishFriendship(friend: Friend) {
@@ -37,6 +49,18 @@ export class FriendsPage {
   }
 
   createGroup() {
-    this._navCtrl.push(FriendsGroupCreatePage)
+    this._navCtrl.push(FriendsGroupPage)
+  }
+
+  name(uid: string): string {
+    let found = this.friends.find((friend, _) => friend.userId === uid);
+    if (found) {
+      return found.displayName;
+    }
+    return "??";
+  }
+
+  editGroup(group: Group) {
+    this._navCtrl.push(FriendsGroupPage, {"group": group})
   }
 }

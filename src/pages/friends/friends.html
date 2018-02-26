@@ -24,6 +24,15 @@
         Gruppe erstellen
       </button>
     </ion-item>
+    <button ion-item *ngFor="let group of me.listGroups()"
+            title="Gruppe anpassen"
+            (click)="editGroup(group)">
+      <h1>{{group.name}}</h1>
+      <span *ngFor="let uid of group.members">
+      <ion-icon name="person"></ion-icon>
+      {{name(uid)}}
+      </span>
+    </button>
     <ion-item *ngFor="let f of friends">
       <user-profile [user]="f"></user-profile>
       <button ion-button item-end clear color="danger" icon-only large title="Freunschaft beenden"

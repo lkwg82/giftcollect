@@ -13,39 +13,38 @@ export class UserCandidate {
   }
 }
 
-export class Groups {
-  private _groups: Map<string, Set<string>> = new Map<string, Set<string>>();
+export class Group {
+  members: Set<string> = new Set<string>();
 
-  add(name: string, userid: string) {
-    let groups = this._groups;
-    let group = groups.get(name);
+  constructor(readonly name: string,
+              ...userIds: string[]) {
+    userIds.forEach(uid => this.add(uid));
+  }
 
-    if (group) {
-      group.add(userid);
-    }
-    else {
-      groups.set(name, new Set<string>([userid]))
-    }
+  add(uid: string) {
+    this.members.add(uid);
   }
 
   toJSON() {
     let obj: { [k: string]: any } = {};
-    obj.groups = {};
-    this._groups.forEach((value: Set<string>, key: string) => {
-      obj.groups[key] = Array.from(value.values());
-    });
+
+    obj.name = this.name;
+    obj.members = Array.from(this.members.values());
+
     return obj;
   }
 
-  static fromObject(groups: Groups): Groups {
-    return new Groups();
+  static fromObject(g: Group): Group {
+    let group = new Group(g.name);
+    group.members = new Set<string>(g.members);
+    return group;
   }
 }
 
 export class UserProfile {
 
   friends: Friend[] = [];
-  groups: Groups = new Groups();
+  groups: Group[] = [];
 
   constructor(readonly userId: string,
               readonly email: string,
@@ -68,11 +67,33 @@ export class UserProfile {
                                   p.displayName,
                                   p.createdAt,
                                   p.createdAtReadable);
-    profile.friends = p.friends;
-    profile.groups = Groups.fromObject(p.groups);
-
+    profile.friends = p.friends || [];
+    profile.groups = [];
+    if (p.groups) {
+      p.groups.forEach(g => {
+        profile.groups.push(Group.fromObject(g))
+      });
+    }
     return profile;
   }
+
+  addOrUpdateGroup(_group: Group) {
+    let map: Map<string, Group> = new Map<string, Group>();
+    this.groups.forEach(g => map.set(g.name, g));
+
+    map.set(_group.name, _group);
+
+    this.groups = Array.from(map.values())
+  }
+
+  listGroups(): Group[] {
+    let groups = Array.from(this.groups);
+    groups.sort((a: Group, b: Group) => {
+      return a.name.localeCompare(b.name)
+    });
+    return Array.from(groups.values());
+  }
+
 }
 
 export class Friend {
@@ -178,7 +199,7 @@ export class FireStoreDriver {
           .valueChanges()
           .takeUntil(this._auth.signedOut)
           .subscribe((dct: UserProfile[]) => {
-            observer.next(dct.map(d => UserProfile.fromObject(d)));
+            observer.next(dct.map((d: UserProfile) => UserProfile.fromObject(d)));
           });
     };
     return Observable.create(observer);
@@ -195,7 +216,10 @@ export class FireStoreDriver {
 
   // see https://github.com/firebase/firebase-js-sdk/issues/311
   private static asObject(value: any): object {
-    return JSON.parse(JSON.stringify(value));
+
+    let obj = JSON.parse(JSON.stringify(value));
+    console.debug("object", value, obj);
+    return obj;
   }
 
   deny(candidate: UserCandidate): Promise<void> {

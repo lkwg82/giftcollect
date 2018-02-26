@@ -1,7 +1,10 @@
 <ion-header>
   <ion-toolbar>
-    <ion-title>Neue Gruppe<br>
+    <ion-title *ngIf="!changing">Neue Gruppe<br>
       <span>Teilnehmer hinzufügen</span>
+    </ion-title>
+    <ion-title *ngIf="changing">Gruppe bearbeiten<br>
+      <span>Teilnehmer hinzufügen/entfernen</span>
     </ion-title>
   </ion-toolbar>
 </ion-header>
@@ -13,8 +16,8 @@
       <ion-icon name="arrow-forward"></ion-icon>
     </button>
   </ion-fab>
-  <button *ngFor="let su of selectedUsers" (click)="remove(su)">
-    <ion-icon name="person"></ion-icon>
+  <button *ngFor="let su of selectedUsers" (click)="unselect(su)">
+    <ion-icon name="remove-circle"></ion-icon>
     {{ su.displayName }}
   </button>
   <ion-list inset>
@@ -22,7 +25,7 @@
       Freunde
     </ion-list-header>
     <ion-item *ngFor="let user of friends">
-      <button ion-item (click)="add(user)">
+      <button ion-item (click)="select(user)" *ngIf="!user.selected">
         <user-profile [user]="user"></user-profile>
       </button>
     </ion-item>
