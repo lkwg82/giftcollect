@@ -1,12 +1,17 @@
 <ion-header>
-  <ion-toolbar>
+  <ion-navbar>
     <ion-title *ngIf="!changing">Neue Gruppe<br>
       <span>Teilnehmer hinzufügen</span>
     </ion-title>
     <ion-title *ngIf="changing">Gruppe bearbeiten<br>
       <span>Teilnehmer hinzufügen/entfernen</span>
     </ion-title>
-  </ion-toolbar>
+    <ion-buttons end icon-only large *ngIf="changing" (click)="delete(group)">
+      <button ion-button>
+        <ion-icon name="trash"></ion-icon>
+      </button>
+    </ion-buttons>
+  </ion-navbar>
 </ion-header>
 
 

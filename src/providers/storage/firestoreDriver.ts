@@ -94,6 +94,9 @@ export class UserProfile {
     return Array.from(groups.values());
   }
 
+  removeGroup(group: Group) {
+    this.groups = this.groups.filter(g => g.name != group.name);
+  }
 }
 
 export class Friend {

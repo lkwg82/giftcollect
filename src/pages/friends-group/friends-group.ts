@@ -1,5 +1,5 @@
 import {Component} from '@angular/core';
-import {NavController, NavParams} from "ionic-angular";
+import {AlertController, NavController, NavParams} from "ionic-angular";
 import {UserService} from "../../providers/user/userService";
 import {Group, UserProfile} from "../../providers/storage/firestoreDriver";
 import {NoticeController} from "../../providers/view/notice/NoticeController";
@@ -21,8 +21,9 @@ export class FriendsGroupPage {
 
   constructor(private _userService: UserService,
               private _navCtrl: NavController,
+              private _navParams: NavParams,
               private _noticeCtrl: NoticeController,
-              private _navParams: NavParams) {
+              private _alertCtrl: AlertController,) {
   }
 
   ionViewDidLoad() {
@@ -34,6 +35,7 @@ export class FriendsGroupPage {
     }
 
     this.mapFriends(this._userService.friends);
+    this.me = this._userService.me;
     this._userService.meO
         .takeUntil(this.stop$)
         .subscribe(profile => this.me = profile);
@@ -75,6 +77,36 @@ export class FriendsGroupPage {
       };
       this._navCtrl.push(FriendsGroupStep2Page, params);
     }
+  }
+
+  delete(group: Group) {
+    this._alertCtrl.create({
+                             title: 'Gruppe entfernen',
+                             message: 'Möchtest du die Gruppe "' + this.group.name + '" entfernen?',
+                             buttons: [
+                               {
+                                 text: 'Abbrechen',
+                                 role: 'cancel',
+                                 handler: () => {
+                                   console.log('Cancel clicked');
+                                 }
+                               },
+                               {
+                                 text: 'Löschen',
+                                 handler: () => {
+                                   this.me.removeGroup(this.group);
+                                   this._userService
+                                       .updateProfile(this.me)
+                                       .then(() => {
+                                         this._noticeCtrl.notice("Gruppe '" + this.group.name + "' entfernt")
+                                         this._navCtrl.pop();
+                                       })
+                                       .catch((e) => console.error(e))
+                                 }
+                               }
+                             ]
+                           }).present();
+
   }
 }
 
