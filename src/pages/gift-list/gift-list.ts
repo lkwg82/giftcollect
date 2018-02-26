@@ -6,10 +6,10 @@ import {Gift} from "../../app/domain/gift";
 import {Subject} from "rxjs/Subject";
 
 @Component({
-             selector: 'page-home',
-             templateUrl: 'home.html'
+             selector: 'page-gift-list',
+             templateUrl: 'gift-list.html'
            })
-export class HomePage {
+export class GiftListPage {
   private stop$: Subject<void> = new Subject<void>();
 
   gifts: Gift[] = [];

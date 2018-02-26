@@ -11,7 +11,7 @@ import {UsersPage} from "../pages/users/users";
 import {AuthServiceProvider} from "../providers/auth-service/auth-service";
 import {FriendsPage} from "../pages/friends/friends";
 import {UserService} from "../providers/user/userService";
-import {HomePage} from "../pages/home/home";
+import {GiftListPage} from "../pages/gift-list/gift-list";
 
 @Component({
              templateUrl: 'app.html'
@@ -50,7 +50,7 @@ export class MyApp {
         this._userService.otherUsersO.subscribe(users => this.usersCount = users.length + 1);
 
         if (state.approved) {
-          this.nav.setRoot(HomePage);
+          this.nav.setRoot(GiftListPage);
         } else {
           this.nav.setRoot(ApprovalPage);
         }

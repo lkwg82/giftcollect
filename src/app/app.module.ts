@@ -10,7 +10,7 @@ import {AngularFireAuth} from 'angularfire2/auth';
 import {MyApp} from './app.component';
 
 import {AboutPage} from "../pages/about/about";
-import {HomePage} from '../pages/home/home';
+import {GiftListPage} from '../pages/gift-list/gift-list';
 import {LoginPage} from "../pages/login/login";
 import {GiftPage} from "../pages/gift/gift";
 
@@ -49,7 +49,7 @@ export const firebaseConfig = {
               FriendsGroupPage,
               FriendsGroupStep2Page,
               GiftPage,
-              HomePage,
+              GiftListPage,
               LoginPage,
               UsersPage,
               /* components */
@@ -72,7 +72,7 @@ export const firebaseConfig = {
               FriendsGroupPage,
               FriendsGroupStep2Page,
               GiftPage,
-              HomePage,
+              GiftListPage,
               LoginPage,
               UsersPage,
               /* components */

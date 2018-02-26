@@ -3,7 +3,7 @@ import {AlertController, NavController, NavParams} from "ionic-angular";
 import {UserService} from "../../providers/user/userService";
 import {Group, UserProfile} from "../../providers/storage/firestoreDriver";
 import {NoticeController} from "../../providers/view/notice/NoticeController";
-import {HomePage} from "../home/home";
+import {GiftListPage} from "../gift-list/gift-list";
 import {Subject} from "rxjs/Subject";
 
 @Component({
@@ -162,7 +162,7 @@ export class FriendsGroupStep2Page {
             } else {
               this._noticeCtrl.notice("Gruppe '" + this.group.name + "' angelegt");
             }
-            this._navCtrl.setRoot(HomePage);
+            this._navCtrl.setRoot(GiftListPage);
           })
           .catch((e) => console.error(e))
     }
