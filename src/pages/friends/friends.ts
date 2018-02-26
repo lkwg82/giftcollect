@@ -1,9 +1,10 @@
 import {Component} from '@angular/core';
-import {Friend, Group, UserProfile} from "../../providers/storage/firestoreDriver";
+import {Group, UserProfile} from "../../providers/storage/firestoreDriver";
 import {UserService} from "../../providers/user/userService";
-import {NavController} from "ionic-angular";
+import {AlertController, NavController} from "ionic-angular";
 import {FriendsGroupPage} from "../friends-group/friends-group";
 import {Subject} from "rxjs/Subject";
+import {NoticeController} from "../../providers/view/notice/NoticeController";
 
 @Component({
              selector: 'page-friends',
@@ -16,7 +17,9 @@ export class FriendsPage {
   private stop$ = new Subject<void>();
 
   constructor(private _userService: UserService,
-              private _navCtrl: NavController) {
+              private _navCtrl: NavController,
+              private _alertCtrl: AlertController,
+              private _noticeCtrl: NoticeController,) {
     this.me = this._userService.me;
     this.friends = this._userService.friends;
   }
@@ -38,14 +41,31 @@ export class FriendsPage {
     this.stop$.complete();
   }
 
-  finishFriendship(friend: Friend) {
-    this.me.friends = this.me.friends.filter(f => f == friend);
-    this._userService
-        .updateProfile(this.me)
-        .then(() => {
-          console.log("updated profile", this.me);
-        })
-        .catch(e => console.error(e));
+  finishFriendship(friend: UserProfile) {
+
+    this._alertCtrl.create({
+                             title: 'Freundschaft beenden',
+                             message: 'Möchtest du die Freundschaft mit "' + friend.displayName + '" beenden?',
+                             buttons: [
+                               {
+                                 text: 'Abbrechen',
+                                 role: 'cancel',
+                                 handler: () => {
+                                   console.log('Cancel clicked');
+                                 }
+                               },
+                               {
+                                 text: 'Beenden',
+                                 handler: () => {
+                                   this.me.friends = this.me.friends.filter(f => f == friend);
+                                   this._userService
+                                       .updateProfile(this.me)
+                                       .then(() => this._noticeCtrl.notice("Freundschaft beendet"))
+                                       .catch(e => console.error(e));
+                                 }
+                               }
+                             ]
+                           }).present();
   }
 
   createGroup() {
