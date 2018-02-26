@@ -17,6 +17,7 @@ export class GiftPage {
   public base64Image: string = "";
 
   gift: Gift = new Gift("");
+  giftOriginal: Gift = new Gift("");
   public changing: boolean = false;
 
   constructor(private camera: Camera,
@@ -32,7 +33,10 @@ export class GiftPage {
     if (this._navParams.data.hasOwnProperty("gift")) {
       this.gift = this._navParams.get("gift") as Gift;
       this.changing = true;
+
     }
+    this.giftOriginal = {...this.gift};
+
     this.gift.owner = this._auth.uid;
   }
 
@@ -42,8 +46,41 @@ export class GiftPage {
     }, 150);
   }
 
-  ionViewWillLeave() {
-    this._giftStore.addOrUpdate(this.gift);
+  ionViewCanLeave(): boolean | Promise<void> {
+    let same = (key: string) => {
+      let g1: any = (<any> this.gift)[key];
+      let g2: any = (<any> this.giftOriginal)[key];
+
+      console.debug("key:" + key, g1, g2);
+      return g1 === g2
+    };
+
+    let hasChanged = () => {
+      return !['title', 'estimatedPrice', 'description'].every(key => same(key));
+    };
+
+    return new Promise<void>((ok, cancel) => {
+      if (hasChanged()) {
+        let options = {
+          title: 'Abbrechen',
+          message: 'Du verlierst deine Änderungen, weiter?',
+          buttons: [
+            {
+              text: 'Abbrechen',
+              role: 'cancel',
+              handler: () => cancel()
+            },
+            {
+              text: 'Ok',
+              handler: () => ok()
+            }
+          ]
+        };
+        this._alertCtrl.create(options).present();
+      } else {
+        ok();
+      }
+    });
   }
 
   takePicture() {
