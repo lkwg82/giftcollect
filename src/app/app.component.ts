@@ -79,15 +79,27 @@ export class MyApp {
   }
 
   showCandidates(): void {
-    this.nav.push(CandidatesPage)
+    this.pushPage(CandidatesPage)
   }
 
   showFriends(): void {
-    this.nav.push(FriendsPage)
+    this.pushPage(FriendsPage)
+  }
+
+  showGiftList(): void {
+    this.pushPage(GiftListPage)
   }
 
   showUsers(): void {
-    this.nav.push(UsersPage)
+    this.pushPage(UsersPage)
+  }
+
+  private pushPage(page: any) {
+    if (page.name === this.nav.getActive().name) {
+      console.debug("already on " + page.name);
+    } else {
+      this.nav.push(page);
+    }
   }
 
   signOut(): void {

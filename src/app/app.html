@@ -6,6 +6,10 @@
   </ion-header>
   <ion-content>
     <ion-list>
+      <button ion-item menuClose (click)="showGiftList()" [ngClass]="classes">
+        <ion-icon name="basket"></ion-icon>
+        Geschenke
+      </button>
       <button ion-item menuClose (click)="showFriends()" [ngClass]="classes">
         <ion-icon name="people"></ion-icon>
         Freunde <span itemCount *ngIf="friendsCount>0">{{friendsCount}}</span>
