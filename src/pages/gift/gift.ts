@@ -98,11 +98,61 @@ export class GiftPage {
   }
 
   showDescription() {
-    this.gift.description = "deine Beschreibung";
+    if (this.gift.description) {
+      let opts = {
+        title: 'Beschreibung entfernen',
+        message: 'Möchtest du die Beschreibung entfernen?',
+        buttons: [
+          {
+            text: 'Abbrechen',
+            role: 'cancel',
+            handler: () => {
+              console.log('Cancel clicked');
+            }
+          },
+          {
+            text: 'Entfernen',
+            handler: () => {
+              this.gift.description = '';
+            }
+          }
+        ]
+      };
+      this._alertCtrl.create(opts).present();
+    } else {
+      this.gift.description = "deine Beschreibung";
+    }
   }
 
   showEstimatedPrice() {
-    this.gift.estimatedPrice = 10;
+    if (this.gift.estimatedPrice) {
+      let opts = {
+        title: 'Preis entfernen',
+        message: 'Möchtest du den Preis entfernen?',
+        buttons: [
+          {
+            text: 'Abbrechen',
+            role: 'cancel',
+            handler: () => {
+              console.log('Cancel clicked');
+            }
+          },
+          {
+            text: 'Entfernen',
+            handler: () => {
+              this.gift.estimatedPrice = 0;
+            }
+          }
+        ]
+      };
+      this._alertCtrl.create(opts).present();
+    } else {
+      this.gift.estimatedPrice = 10;
+    }
+  }
+
+  share(gift: Gift) {
+    this._noticeCtrl.notice("like to share (NOT IMPLEMENTED YET)");
   }
 }
 
