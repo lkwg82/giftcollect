@@ -22,7 +22,7 @@
   <ion-grid>
     <ion-row>
       <ion-col>
-        <button ion-button outline (click)="takePicture()">
+        <button ion-button [outline]="!base64Image.length" (click)="tooglePictures()">
           <ion-icon name="camera"></ion-icon>
         </button>
         <button ion-button [outline]="!gift.description"
@@ -41,9 +41,14 @@
       </ion-col>
     </ion-row>
   </ion-grid>
-  <!--Latest Picture:-->
-  <!--<img [src]="base64Image" *ngIf="base64Image"/>-->
-  <!--<ion-input type="text" [value]="size"></ion-input>-->
+  <ion-item *ngIf="base64Image.length">
+    <img [src]="asImage(image)" *ngFor="let image of base64Image" width="50" height="50" style="margin:1rem"/>
+    <button ion-button
+            title="füge ein weiteres Bild hinzu"
+            (click)="takeAnotherPicture()">
+      <ion-icon name="add"></ion-icon>
+    </button>
+  </ion-item>
 
   <ion-item *ngIf="gift.description">
     <ion-textarea placeholder="Beschreibung"
