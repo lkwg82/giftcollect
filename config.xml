@@ -86,6 +86,7 @@
   <plugin name="cordova-plugin-inappbrowser" spec="~2.0.2"/>
   <plugin name="cordova-plugin-splashscreen" spec="^4.1.0"/>
   <plugin name="cordova-plugin-statusbar" spec="2.2.2"/>
+  <plugin name="cordova-plugin-whitelist" spec="https://github.com/apache/cordova-plugin-whitelist.git"/>
   <plugin name="cordova-sqlite-storage" spec="^2.2.0"/>
   <plugin name="cordova-universal-links-plugin" spec="~1.2.1"/>
   <plugin name="ionic-plugin-keyboard" spec="~2.2.1"/>
@@ -97,5 +98,4 @@
     </host>
   </universal-links>
   <preference name="AndroidLaunchMode" value="singleTask"/>
-  <plugin name="cordova-plugin-whitelist" spec="https://github.com/apache/cordova-plugin-whitelist.git"/>
 </widget>
