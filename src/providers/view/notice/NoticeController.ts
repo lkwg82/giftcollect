@@ -12,7 +12,7 @@ export class NoticeController {
     let opts = {
       message: text,
       duration: dismissTimeout,
-      position: 'bottom'
+      position: 'middle'
     };
     return this._toastCtrl.create(opts).present();
   }
