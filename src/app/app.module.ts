@@ -24,7 +24,6 @@ import {UsersPage} from "../pages/users/users";
 import {CurrentUser} from "../providers/user/CurrentUser";
 import {FriendsPage} from "../pages/friends/friends";
 import {UserService} from '../providers/user/userService';
-import {HintComponent} from '../components/hint/hint';
 import {UserProfileComponent} from '../components/user-profile/user-profile';
 import {FriendsGroupPage, FriendsGroupStep2Page} from "../pages/friends-group/friends-group";
 import {NoticeController} from "../providers/view/notice/NoticeController";
@@ -53,7 +52,6 @@ export const firebaseConfig = {
               LoginPage,
               UsersPage,
               /* components */
-              HintComponent,
               UserProfileComponent,
             ],
             imports: [
@@ -76,7 +74,6 @@ export const firebaseConfig = {
               LoginPage,
               UsersPage,
               /* components */
-              HintComponent,
               UserProfileComponent,
             ],
             providers: [

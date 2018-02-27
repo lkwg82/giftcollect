@@ -1,7 +1,6 @@
 import {Component} from '@angular/core';
 import {AuthServiceProvider} from "../../providers/auth-service/auth-service";
-import {ModalController} from "ionic-angular";
-import {HintComponent} from "../../components/hint/hint";
+import {AlertController} from "ionic-angular";
 
 @Component({
              selector: 'page-login',
@@ -11,13 +10,25 @@ export class LoginPage {
   loading: boolean = false;
 
   constructor(private _auth: AuthServiceProvider,
-              private modalCtrl: ModalController) {
+              private alertCtrl: AlertController) {
   }
 
   signInWithGoogle(): void {
     this.loading = true;
     this._auth.signInWithGoogle().catch((e) => {
-      this.modalCtrl.create(HintComponent, {"hint": e}).present();
+      this.alertCtrl.create({
+                              title: 'Fehler',
+                              message: e,
+                              buttons: [
+                                {
+                                  text: 'Abbrechen',
+                                  role: 'cancel',
+                                  handler: () => {
+                                    console.log('Cancel clicked');
+                                  }
+                                }
+                              ]
+                            }).present();
       console.error(e);
       this.loading = false;
     });
