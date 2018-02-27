@@ -27,6 +27,8 @@ import {UserService} from '../providers/user/userService';
 import {UserProfileComponent} from '../components/user-profile/user-profile';
 import {FriendsGroupPage, FriendsGroupStep2Page} from "../pages/friends-group/friends-group";
 import {NoticeController} from "../providers/view/notice/NoticeController";
+import {IonicStorageModule} from "@ionic/storage";
+import {AngularFireStorage, AngularFireStorageModule} from "angularfire2/storage";
 
 export const firebaseConfig = {
   apiKey: "AIzaSyAxO7i-Ekduq6VbeLkouU6pFnOiD28xCLg",
@@ -56,9 +58,11 @@ export const firebaseConfig = {
             ],
             imports: [
               BrowserModule,
-              IonicModule.forRoot(MyApp),
               AngularFireModule.initializeApp(firebaseConfig),
-              AngularFirestoreModule.enablePersistence()
+              AngularFirestoreModule.enablePersistence(),
+              AngularFireStorageModule,
+              IonicModule.forRoot(MyApp),
+              IonicStorageModule.forRoot()
             ],
             bootstrap: [IonicApp],
             entryComponents: [
@@ -78,6 +82,7 @@ export const firebaseConfig = {
             ],
             providers: [
               AngularFireAuth,
+              AngularFireStorage,
               AngularFirestore,
               AuthServiceProvider,
               Camera,

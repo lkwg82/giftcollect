@@ -12,6 +12,8 @@ export class Gift {
   deleted: boolean;
   deletedAt: number;
 
+  imageUUIDs: string[] = [];
+
   constructor(title: string) {
     this.id = uuid();
     this.title = title;
