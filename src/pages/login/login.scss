@@ -12,14 +12,14 @@ page-login {
 
   @media screen and (orientation: landscape) {
     .login_img {
-      background: url("/assets/login_title.jpg") no-repeat center center fixed;
+      background: url("../assets/login_title.jpg") no-repeat center center fixed;
       background-size: cover;
     }
   }
 
   @media screen and (orientation: portrait) {
     .login_img {
-      background: url("/assets/login_title_h2.jpg") no-repeat center center fixed;
+      background: url("../assets/login_title_h2.jpg") no-repeat center center fixed;
       background-size: cover;
     }
   }
