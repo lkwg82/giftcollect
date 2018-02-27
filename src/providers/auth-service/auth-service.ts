@@ -36,7 +36,22 @@ export class AuthServiceProvider {
 
     let auth = this.afAuth.auth;
 
-    return auth.signInWithPopup(authProvider);
+    return auth.signInWithRedirect(authProvider)
+               .then(() => firebase.auth().getRedirectResult())
+               .then(result => {
+                 // This gives you a Google Access Token.
+                 // You can use it to access the Google API.
+                 let token = result.credential.accessToken;
+                 // The signed-in user info.
+                 let user = result.user;
+                 console.log("auth ok", result)
+               })
+               .catch(function (error) {
+                 // Handle Errors here.
+                 let errorCode = error.code;
+                 let errorMessage = error.message;
+                 console.error("error " + errorCode + ":" + errorMessage)
+               });
   }
 
   get uid(): string {
