@@ -1,5 +1,5 @@
 import {Component, ViewChild} from '@angular/core';
-import {NavController, Platform} from 'ionic-angular';
+import {NavController, Platform, ToastController} from 'ionic-angular';
 import {StatusBar} from '@ionic-native/status-bar';
 import {SplashScreen} from '@ionic-native/splash-screen';
 import {LoginPage} from "../pages/login/login";
@@ -31,10 +31,41 @@ export class MyApp {
               splashScreen: SplashScreen,
               private _currentUser: CurrentUser,
               private _userService: UserService,
-              private _auth: AuthServiceProvider) {
+              private _auth: AuthServiceProvider,
+              private toastCtrl: ToastController,) {
+
+    platform.ready().then(() => {
+      splashScreen.hide();
+      this.handleBackButton(platform);
+    });
   }
 
-  // Wait for the components in MyApp's template to be initialized
+  private handleBackButton(platform: Platform) {
+//Back button handling
+    let lastTimeBackPress = 0;
+    let timePeriodToExit = 2000;
+    platform.registerBackButtonAction(() => {
+      // get current active page
+      let view = this.nav.getActive();
+      if (view.instance instanceof GiftListPage) {
+        if (new Date().getTime() - lastTimeBackPress < timePeriodToExit) {
+          platform.exitApp(); //Exit from app
+        } else {
+          let toast = this.toastCtrl.create({
+                                              message: 'Drücke nochmal "Zurück", um die Anwendung zu verlassen.',
+                                              duration: 2000,
+                                              position: 'middle',
+                                            });
+          toast.present();
+          lastTimeBackPress = new Date().getTime();
+        }
+      } else {
+        this.nav.pop({}); // go to previous page
+      }
+    });
+  }
+
+// Wait for the components in MyApp's template to be initialized
   // In this case, we are waiting for the Nav with reference variable of "#myNav"
   ngOnInit() {
     this._currentUser.state.subscribe((state: State) => {
