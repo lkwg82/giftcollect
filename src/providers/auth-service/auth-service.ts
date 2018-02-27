@@ -50,7 +50,8 @@ export class AuthServiceProvider {
                  // Handle Errors here.
                  let errorCode = error.code;
                  let errorMessage = error.message;
-                 console.error("error " + errorCode + ":" + errorMessage)
+                 console.error("error " + errorCode + ":" + errorMessage);
+                 return Promise.reject(error);
                });
   }
 
