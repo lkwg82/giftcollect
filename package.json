@@ -55,7 +55,7 @@
     "description": "An Ionic project",
     "cordova": {
         "plugins": {
-            "cordova-plugin-advanced-http": {}
+            "cordova-plugin-advanced-http": {},
             "cordova-plugin-browsertab": {},
             "cordova-plugin-buildinfo": {},
             "cordova-plugin-camera": {},
@@ -63,7 +63,7 @@
             "cordova-plugin-splashscreen": {},
             "cordova-sqlite-storage": {},
             "cordova-plugin-whitelist": {},
-            "cordova-universal-links-plugin": {},
+            "cordova-universal-links-plugin": {}
         }
     }
 }
