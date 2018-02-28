@@ -29,6 +29,8 @@ import {FriendsGroupPage, FriendsGroupStep2Page} from "../pages/friends-group/fr
 import {NoticeController} from "../providers/view/notice/NoticeController";
 import {IonicStorageModule} from "@ionic/storage";
 import {AngularFireStorage, AngularFireStorageModule} from "angularfire2/storage";
+import {HTTP} from "@ionic-native/http";
+import {HttpClientModule} from "@angular/common/http";
 
 export const firebaseConfig = {
   apiKey: "AIzaSyAxO7i-Ekduq6VbeLkouU6pFnOiD28xCLg",
@@ -57,10 +59,11 @@ export const firebaseConfig = {
               UserProfileComponent,
             ],
             imports: [
-              BrowserModule,
               AngularFireModule.initializeApp(firebaseConfig),
               AngularFirestoreModule.enablePersistence(),
               AngularFireStorageModule,
+              BrowserModule,
+              HttpClientModule,
               IonicModule.forRoot(MyApp),
               IonicStorageModule.forRoot()
             ],
@@ -81,16 +84,19 @@ export const firebaseConfig = {
               UserProfileComponent,
             ],
             providers: [
+              /* from library */
               AngularFireAuth,
               AngularFireStorage,
               AngularFirestore,
-              AuthServiceProvider,
               Camera,
+              HTTP,
+              SplashScreen,
+              StatusBar,
+              /* custom */
+              AuthServiceProvider,
               CurrentUser,
               GiftStore,
               GiftStorage,
-              SplashScreen,
-              StatusBar,
               UserService,
               FireStoreDriver,
               /* view controller */

@@ -9,6 +9,7 @@ import {Storage} from '@ionic/storage';
 import {AngularFireStorage, AngularFireUploadTask} from "angularfire2/storage";
 import uuid from "uuid/v4";
 import * as firebase from "firebase/app";
+import {HttpClient} from "@angular/common/http";
 import UploadMetadata = firebase.storage.UploadMetadata;
 
 @Injectable()
@@ -80,7 +81,8 @@ class OfflineBlobStorage {
   readonly prefix: string = "images";
 
   constructor(private storage: Storage,
-              private afs: AngularFireStorage) {
+              private afs: AngularFireStorage,
+              private http: HttpClient) {
   }
 
   save(gift: Gift, image: GiftImage): Promise<void> {
@@ -176,20 +178,45 @@ class OfflineBlobStorage {
   }
 
   retrieveImage(uuid: string): Promise<GiftImage> {
-    return this.storage
-               .get(this.prefix + "_" + uuid)
-               .then(image => image)
-               .catch(e => {
-                 console.log("image '" + uuid + "' not found", e);
-                 this.afs.ref("images/" + uuid)
-                     .getDownloadURL().toPromise()
-                     .then(downloadUrl => {
-                       // this.http.get(downloadUrl).toPromise()
-                       //     .then(body => {
-                       //       console.log("body size ", body)
-                       //     })
-                     })
-               })
+    let key = this.prefix + "_" + uuid;
+    let promise = new Promise<GiftImage>((ok, error) => {
+      this.storage
+          .get(key)
+          .then((blob: OfflineBlob<GiftImage>) => {
+            if (blob) {
+              ok(new GiftImage(blob.data.id, blob.data.data));
+            } else {
+              console.log("image '" + uuid + "' not found in local storage");
+              this.afs.ref("images/" + uuid)
+                  .getDownloadURL()
+                  .subscribe(downloadUrl => {
+                    console.log("url:" + downloadUrl);
+                    this.http.get(downloadUrl, {responseType: 'blob'})
+                        .subscribe(blob => {
+                          console.log("data", blob);
+                          let arrayBuffer: ArrayBuffer = new ArrayBuffer(1);
+                          let fileReader = new FileReader();
+                          fileReader.onload = function () {
+                            arrayBuffer = this.result;
+                          };
+                          fileReader.onloadend = () => {
+                            let giftImage = new GiftImage(uuid, new Uint8Array(arrayBuffer));
+                            let offlineBlob = new OfflineBlob<GiftImage>(true, giftImage);
+                            this.storage.set(key, offlineBlob).then(() => ok(giftImage));
+                          };
+                          fileReader.readAsArrayBuffer(blob);
+                        })
+                  })
+            }
+          })
+          .catch(e => {
+            console.error(e);
+            error(e);
+          })
+    });
+    return promise
+      .then(image => Promise.resolve(image))
+      .catch(e => Promise.reject(e))
   }
 }
 
@@ -199,9 +226,10 @@ export class GiftStore {
 
   constructor(private giftStorage: GiftStorage,
               private storage: Storage,
-              private afs: AngularFireStorage) {
+              private afs: AngularFireStorage,
+              private http: HttpClient) {
     console.debug("started giftstore");
-    this.blobStorage = new OfflineBlobStorage(storage, afs);
+    this.blobStorage = new OfflineBlobStorage(storage, afs, http);
   }
 
 
