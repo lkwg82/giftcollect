@@ -15,14 +15,16 @@ export class AuthServiceProvider {
 
   constructor(private afAuth: AngularFireAuth) {
     this.state = afAuth.authState;
-    this.state.subscribe((user: firebase.User) => {
+    this.state.subscribe(user => {
       console.debug("user", user);
-      this._user = user;
+      if (user) {
+        this._user = user;
+      }
     });
 
     this.state
-        .subscribe((user: firebase.User) => {
-          if (user == null) {
+        .subscribe(user => {
+          if (!user) {
             console.log("signal signout:");
             this.signedOut.next();
           }
@@ -41,9 +43,9 @@ export class AuthServiceProvider {
                .then(result => {
                  // This gives you a Google Access Token.
                  // You can use it to access the Google API.
-                 let token = result.credential.accessToken;
-                 // The signed-in user info.
-                 let user = result.user;
+                 // let token = result.credential.accessToken;
+                 // // The signed-in user info.
+                 // let user = result.user;
                  console.log("auth ok", result)
                })
                .catch(function (error) {

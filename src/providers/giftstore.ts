@@ -77,7 +77,8 @@ class OfflineBlob<T> {
   }
 }
 
-class OfflineBlobStorage {
+@Injectable()
+export class OfflineBlobStorage {
   readonly prefix: string = "images";
 
   constructor(private storage: Storage,
@@ -222,14 +223,10 @@ class OfflineBlobStorage {
 
 @Injectable()
 export class GiftStore {
-  private blobStorage: OfflineBlobStorage;
 
   constructor(private giftStorage: GiftStorage,
-              private storage: Storage,
-              private afs: AngularFireStorage,
-              private http: HttpClient) {
+              private blobStorage: OfflineBlobStorage) {
     console.debug("started giftstore");
-    this.blobStorage = new OfflineBlobStorage(storage, afs, http);
   }
 
 

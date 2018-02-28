@@ -103,10 +103,6 @@ export class UserService {
   get changes(): Changes {
     return new Changes(this._storage);
   }
-
-  get delete(): Deletes {
-    return new Deletes(this._storage);
-  }
 }
 
 
@@ -124,10 +120,5 @@ class Changes {
 
   users(): Observable<UserProfile[]> {
     return this._storage.usersValueChanges();
-  }
-}
-
-class Deletes {
-  constructor(private readonly _storage: FireStoreDriver) {
   }
 }
